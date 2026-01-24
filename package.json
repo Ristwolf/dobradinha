@@ -1,0 +1,10 @@
+{
+  "name": "dobradinha",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "gen:abstracts": "node scripts/gen-abstracts.mjs",
+    "gen:videos": "node scripts/gen-videos.mjs"
+  }
+}
