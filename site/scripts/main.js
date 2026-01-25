@@ -186,11 +186,138 @@ function createPdfCard({ title, url }) {
   return article;
 }
 
+function createPdfSwapCard({ title, categoryTitle, url }) {
+  const article = document.createElement('article');
+  article.className = 'bg-white rounded-lg overflow-hidden shadow-md card';
+  article.style.position = 'absolute';
+  article.style.inset = '0';
+
+  article.innerHTML = `
+    <div class="p-6 h-full flex flex-col justify-between">
+      <div>
+        <div class="text-sm text-gray-500 mb-2"></div>
+        <h3 class="text-xl font-bold text-gray-800 mb-3"></h3>
+      </div>
+      <div class="flex items-center justify-between">
+        <a class="text-amber-600 hover:text-amber-700 font-medium inline-flex items-center" target="_blank" rel="noopener">
+          <span>Abrir PDF</span>
+          <i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  `;
+
+  article.querySelector('h3').textContent = title;
+  article.querySelector('div.text-sm').textContent = categoryTitle;
+  article.querySelector('a').href = url;
+  return article;
+}
+
+function mountCardSwap(container, cardElements, { delayMs = 3500, pauseOnHover = true } = {}) {
+  // Fallback: if GSAP isn't available, show as a normal vertical list.
+  const gsap = window.gsap;
+  if (!gsap?.to || cardElements.length === 0) {
+    container.classList.remove('relative');
+    container.innerHTML = '';
+    const list = document.createElement('div');
+    list.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8';
+    for (const el of cardElements) {
+      el.style.position = '';
+      el.style.inset = '';
+      list.appendChild(el);
+    }
+    container.appendChild(list);
+    return { stop() {}, start() {} };
+  }
+
+  container.innerHTML = '';
+  container.classList.add('relative');
+  // Ensure the stack has height, otherwise absolutely-positioned cards won't be visible.
+  container.classList.add('h-72', 'md:h-80');
+
+  const cards = [...cardElements];
+  // Add in reverse so the first item ends up on top initially.
+  for (let i = cards.length - 1; i >= 0; i -= 1) {
+    container.appendChild(cards[i]);
+  }
+
+  const visibleDepth = 4;
+  const yStep = 10;
+  const scaleStep = 0.03;
+
+  function layout() {
+    for (let i = 0; i < cards.length; i += 1) {
+      const el = cards[i];
+      const isVisible = i < visibleDepth;
+      gsap.set(el, {
+        zIndex: cards.length - i,
+        x: 0,
+        y: isVisible ? i * yStep : visibleDepth * yStep,
+        rotation: 0,
+        scale: isVisible ? 1 - i * scaleStep : 1 - visibleDepth * scaleStep,
+        autoAlpha: isVisible ? 1 : 0
+      });
+    }
+  }
+
+  layout();
+
+  let timer = null;
+  let isPaused = false;
+  let isAnimating = false;
+
+  function swapOnce() {
+    if (isPaused || isAnimating || cards.length <= 1) return;
+    isAnimating = true;
+
+    const top = cards[0];
+    gsap.to(top, {
+      x: 44,
+      y: -6,
+      rotation: 6,
+      autoAlpha: 0,
+      duration: 0.35,
+      ease: 'power1.inOut',
+      onComplete: () => {
+        cards.shift();
+        cards.push(top);
+        container.insertBefore(top, container.firstChild);
+        gsap.set(top, { x: 0, y: 0, rotation: 0 });
+        layout();
+        isAnimating = false;
+      }
+    });
+  }
+
+  function start() {
+    stop();
+    timer = window.setInterval(swapOnce, Math.max(1000, Number(delayMs) || 3500));
+  }
+
+  function stop() {
+    if (timer) window.clearInterval(timer);
+    timer = null;
+  }
+
+  if (pauseOnHover) {
+    container.addEventListener('mouseenter', () => {
+      isPaused = true;
+    });
+    container.addEventListener('mouseleave', () => {
+      isPaused = false;
+    });
+  }
+
+  start();
+  return { start, stop };
+}
+
 async function renderAbstracts() {
   const page = document.querySelector('[data-page="abstracts"]');
   if (!page) return;
 
   const prefix = getSiteRelativePrefix();
+  const swapDelayMs = Number(page.getAttribute('data-swap-delay-ms')) || 3500;
 
   let data;
   try {
@@ -211,9 +338,15 @@ async function renderAbstracts() {
       continue;
     }
 
-    for (const file of category.files) {
-      container.appendChild(createPdfCard({ title: file.name, url: resolveSiteUrl(prefix, file.url) }));
-    }
+    const cards = category.files.map((file) =>
+      createPdfSwapCard({
+        title: file.name,
+        categoryTitle: category.title ?? category.key,
+        url: resolveSiteUrl(prefix, file.url)
+      })
+    );
+
+    mountCardSwap(container, cards, { delayMs: swapDelayMs, pauseOnHover: true });
   }
 
   initAosAndFeather();
