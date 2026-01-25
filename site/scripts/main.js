@@ -62,8 +62,8 @@ function initTabs() {
     const gsap = window.gsap;
     if (!gsap?.fromTo) return;
 
-    // Avoid fighting the CardSwap transforms.
-    if (panel.querySelector('.card-swap-container')) {
+    // Keep this simple to avoid fighting component animations.
+    if (panel.querySelector('.chroma-grid')) {
       gsap.fromTo(panel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'power1.out' });
       return;
     }
@@ -192,225 +192,128 @@ function createPdfCard({ title, url }) {
   return article;
 }
 
-function createPdfSwapCard({ title, categoryTitle, url }) {
-  const article = document.createElement('article');
-  article.className = 'card rounded-xl overflow-hidden shadow-md border border-white bg-black';
-  article.style.transformStyle = 'preserve-3d';
-  article.style.willChange = 'transform';
-  article.style.backfaceVisibility = 'hidden';
-  article.style.webkitBackfaceVisibility = 'hidden';
+function createChromaCard({ image, title, subtitle, handle, borderColor, gradient, url }) {
+  const card = document.createElement('article');
+  card.className = 'chroma-card';
+  card.style.setProperty('--card-border', borderColor || 'transparent');
+  card.style.setProperty('--card-gradient', gradient || 'linear-gradient(145deg, #111, #000)');
+  card.style.cursor = url ? 'pointer' : 'default';
 
-  article.innerHTML = `
-    <div class="relative w-full h-full">
-      <img alt="" class="w-full h-full object-cover" />
-
-      <div class="absolute inset-x-0 top-0 p-4 bg-black/55">
-        <div class="text-xs text-white/80 mb-1"></div>
-        <h3 class="text-lg md:text-xl font-bold text-white leading-snug"></h3>
-      </div>
-
-      <div class="absolute inset-x-0 bottom-0 p-4 flex justify-end">
-        <a class="inline-flex items-center gap-2 rounded-lg bg-white/90 px-4 py-2 text-gray-900 hover:bg-white transition" target="_blank" rel="noopener">
-          <span class="font-medium">Abrir PDF</span>
-          <i data-feather="arrow-right" class="w-4 h-4"></i>
-        </a>
-      </div>
+  card.innerHTML = `
+    <div class="chroma-img-wrapper">
+      <img loading="lazy" />
     </div>
+    <footer class="chroma-info">
+      <h3 class="name"></h3>
+      <span class="handle"></span>
+      <p class="role"></p>
+    </footer>
   `;
 
-  article.querySelector('h3').textContent = title;
-  article.querySelector('div.text-xs').textContent = categoryTitle;
-  article.querySelector('a').href = url;
-  return article;
+  const img = card.querySelector('img');
+  img.src = image;
+  img.alt = title;
+
+  card.querySelector('.name').textContent = title;
+  const handleEl = card.querySelector('.handle');
+  if (handle) {
+    handleEl.textContent = handle;
+  } else {
+    handleEl.remove();
+  }
+  card.querySelector('.role').textContent = subtitle || '';
+
+  function handleCardMove(e) {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+  }
+
+  card.addEventListener('mousemove', handleCardMove);
+  card.addEventListener('click', () => {
+    if (!url) return;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  });
+
+  return card;
 }
 
-function mountCardSwap(
+function mountChromaGrid(
   container,
-  cardElements,
+  items,
   {
-    delayMs = 5000,
-    pauseOnHover = false,
-    cardDistance = 60,
-    verticalDistance = 70,
-    skewAmount = 6,
-    easing = 'elastic',
-    width = 500,
-    height = 400,
-    imageUrl = ''
+    radius = 300,
+    columns = 3,
+    rows = 2,
+    damping = 0.45,
+    fadeOut = 0.6,
+    ease = 'power3.out',
+    height = 600
   } = {}
 ) {
   const gsap = window.gsap;
-  // Fallback: if GSAP isn't available, show as a normal grid.
-  if (!gsap?.timeline || cardElements.length === 0) {
-    container.classList.remove('relative');
-    container.innerHTML = '';
-    const list = document.createElement('div');
-    list.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8';
-    for (const el of cardElements) {
-      el.style.position = '';
-      el.style.inset = '';
-      list.appendChild(el);
-    }
-    container.appendChild(list);
-    return { stop() {}, start() {} };
-  }
 
-  // Prepare wrapper (relative), and an inner swap container (absolute) that mimics ReactBits positioning.
   container.innerHTML = '';
-  container.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-8');
 
   const wrapper = document.createElement('div');
+  wrapper.style.height = `${Number(height) || 600}px`;
   wrapper.style.position = 'relative';
-  wrapper.style.height = `${Math.max(200, Number(container.getAttribute('data-swap-wrapper-height')) || 600)}px`;
 
-  const swapContainer = document.createElement('div');
-  swapContainer.className = 'card-swap-container';
-  swapContainer.style.width = `${Number(width) || 500}px`;
-  swapContainer.style.height = `${Number(height) || 400}px`;
+  const root = document.createElement('div');
+  root.className = 'chroma-grid';
+  root.style.setProperty('--r', `${radius}px`);
+  root.style.setProperty('--cols', String(columns));
+  root.style.setProperty('--rows', String(rows));
 
-  wrapper.appendChild(swapContainer);
+  const overlay = document.createElement('div');
+  overlay.className = 'chroma-overlay';
+  const fade = document.createElement('div');
+  fade.className = 'chroma-fade';
+
+  for (const item of items) {
+    root.appendChild(createChromaCard(item));
+  }
+  root.appendChild(overlay);
+  root.appendChild(fade);
+  wrapper.appendChild(root);
   container.appendChild(wrapper);
 
-  const config =
-    easing === 'elastic'
-      ? {
-          ease: 'elastic.out(0.6,0.9)',
-          durDrop: 2,
-          durMove: 2,
-          durReturn: 2,
-          promoteOverlap: 0.9,
-          returnDelay: 0.05
-        }
-      : {
-          ease: 'power1.inOut',
-          durDrop: 0.8,
-          durMove: 0.8,
-          durReturn: 0.8,
-          promoteOverlap: 0.45,
-          returnDelay: 0.2
-        };
+  if (!gsap?.quickSetter) return;
 
-  // Set images and sizes.
-  for (const el of cardElements) {
-    el.style.width = `${Number(width) || 500}px`;
-    el.style.height = `${Number(height) || 400}px`;
-    if (imageUrl) {
-      const img = el.querySelector('img');
-      if (img) img.src = imageUrl;
-    }
-    swapContainer.appendChild(el);
-  }
+  const setX = gsap.quickSetter(root, '--x', 'px');
+  const setY = gsap.quickSetter(root, '--y', 'px');
+  const pos = { x: 0, y: 0 };
 
-  const total = cardElements.length;
-  const order = Array.from({ length: total }, (_, i) => i);
+  const { width, height: h } = root.getBoundingClientRect();
+  pos.x = width / 2;
+  pos.y = h / 2;
+  setX(pos.x);
+  setY(pos.y);
 
-  const makeSlot = (i) => ({
-    x: i * cardDistance,
-    y: -i * verticalDistance,
-    z: -i * cardDistance * 1.5,
-    zIndex: total - i
-  });
-
-  const placeNow = (el, slot) =>
-    gsap.set(el, {
-      x: slot.x,
-      y: slot.y,
-      z: slot.z,
-      xPercent: -50,
-      yPercent: -50,
-      skewY: skewAmount,
-      transformOrigin: 'center center',
-      zIndex: slot.zIndex,
-      force3D: true
-    });
-
-  order.forEach((idx, i) => placeNow(cardElements[idx], makeSlot(i)));
-
-  let tl = null;
-  let intervalId = null;
-
-  const swap = () => {
-    if (order.length < 2) return;
-
-    const front = order[0];
-    const rest = order.slice(1);
-    const elFront = cardElements[front];
-
-    tl = gsap.timeline();
-
-    tl.to(elFront, {
-      y: '+=500',
-      duration: config.durDrop,
-      ease: config.ease
-    });
-
-    tl.addLabel('promote', `-=${config.durDrop * config.promoteOverlap}`);
-    rest.forEach((idx, i) => {
-      const el = cardElements[idx];
-      const slot = makeSlot(i);
-      tl.set(el, { zIndex: slot.zIndex }, 'promote');
-      tl.to(
-        el,
-        {
-          x: slot.x,
-          y: slot.y,
-          z: slot.z,
-          duration: config.durMove,
-          ease: config.ease
-        },
-        `promote+=${i * 0.15}`
-      );
-    });
-
-    const backSlot = makeSlot(total - 1);
-    tl.addLabel('return', `promote+=${config.durMove * config.returnDelay}`);
-    tl.call(() => {
-      gsap.set(elFront, { zIndex: backSlot.zIndex });
-    }, undefined, 'return');
-    tl.to(
-      elFront,
-      {
-        x: backSlot.x,
-        y: backSlot.y,
-        z: backSlot.z,
-        duration: config.durReturn,
-        ease: config.ease
+  const moveTo = (x, y) => {
+    gsap.to(pos, {
+      x,
+      y,
+      duration: damping,
+      ease,
+      onUpdate: () => {
+        setX(pos.x);
+        setY(pos.y);
       },
-      'return'
-    );
-
-    tl.call(() => {
-      order.splice(0, 1);
-      order.push(front);
+      overwrite: true
     });
   };
 
-  const start = () => {
-    stop();
-    swap();
-    intervalId = window.setInterval(swap, Math.max(500, Number(delayMs) || 5000));
-  };
-
-  const stop = () => {
-    if (intervalId) window.clearInterval(intervalId);
-    intervalId = null;
-  };
-
-  if (pauseOnHover) {
-    const pause = () => {
-      tl?.pause();
-      stop();
-    };
-    const resume = () => {
-      tl?.play();
-      intervalId = window.setInterval(swap, Math.max(500, Number(delayMs) || 5000));
-    };
-    swapContainer.addEventListener('mouseenter', pause);
-    swapContainer.addEventListener('mouseleave', resume);
-  }
-
-  start();
-  return { start, stop };
+  root.addEventListener('pointermove', (e) => {
+    const r = root.getBoundingClientRect();
+    moveTo(e.clientX - r.left, e.clientY - r.top);
+    gsap.to(fade, { opacity: 0, duration: 0.25, overwrite: true });
+  });
+  root.addEventListener('pointerleave', () => {
+    gsap.to(fade, { opacity: 1, duration: fadeOut, overwrite: true });
+  });
 }
 
 async function renderAbstracts() {
@@ -418,14 +321,14 @@ async function renderAbstracts() {
   if (!page) return;
 
   const prefix = getSiteRelativePrefix();
-  const swapDelayMs = Number(page.getAttribute('data-swap-delay-ms')) || 5000;
-  const pauseOnHover = String(page.getAttribute('data-swap-pause-on-hover') ?? 'false') === 'true';
-  const cardDistance = Number(page.getAttribute('data-swap-card-distance')) || 60;
-  const verticalDistance = Number(page.getAttribute('data-swap-vertical-distance')) || 70;
-  const width = Number(page.getAttribute('data-swap-card-width')) || 500;
-  const height = Number(page.getAttribute('data-swap-card-height')) || 400;
-  const skewAmount = Number(page.getAttribute('data-swap-skew')) || 6;
-  const easing = page.getAttribute('data-swap-easing') || 'elastic';
+
+  const chromaRadius = Number(page.getAttribute('data-chroma-radius')) || 300;
+  const chromaColumns = Number(page.getAttribute('data-chroma-columns')) || 3;
+  const chromaRows = Number(page.getAttribute('data-chroma-rows')) || 2;
+  const chromaDamping = Number(page.getAttribute('data-chroma-damping')) || 0.45;
+  const chromaFadeOut = Number(page.getAttribute('data-chroma-fade-out')) || 0.6;
+  const chromaEase = page.getAttribute('data-chroma-ease') || 'power3.out';
+  const chromaHeight = Number(page.getAttribute('data-chroma-height')) || 600;
 
   let data;
   try {
@@ -433,6 +336,16 @@ async function renderAbstracts() {
   } catch {
     return;
   }
+
+  const placeholderImageUrl = resolveSiteUrl(prefix, 'img/j.jpeg');
+  const themeByKey = {
+    bible: { borderColor: '#4F46E5', gradient: 'linear-gradient(145deg, #4F46E5, #000)' },
+    family: { borderColor: '#10B981', gradient: 'linear-gradient(210deg, #10B981, #000)' },
+    history: { borderColor: '#F59E0B', gradient: 'linear-gradient(165deg, #F59E0B, #000)' },
+    ministry: { borderColor: '#EF4444', gradient: 'linear-gradient(195deg, #EF4444, #000)' },
+    theology: { borderColor: '#8B5CF6', gradient: 'linear-gradient(225deg, #8B5CF6, #000)' },
+    'christian-life': { borderColor: '#06B6D4', gradient: 'linear-gradient(135deg, #06B6D4, #000)' }
+  };
 
   for (const category of data.categories ?? []) {
     const container = document.querySelector(`[data-abstracts-container="${CSS.escape(category.key)}"]`);
@@ -446,33 +359,26 @@ async function renderAbstracts() {
       continue;
     }
 
-    const placeholderImageUrl = resolveSiteUrl(prefix, 'img/j.jpeg');
+    const theme = themeByKey[category.key] ?? { borderColor: '#4F46E5', gradient: 'linear-gradient(145deg, #4F46E5, #000)' };
 
-    const cards = category.files.map((file) => {
-      const el = createPdfSwapCard({
-        title: file.name,
-        categoryTitle: category.title ?? category.key,
-        url: resolveSiteUrl(prefix, file.url)
-      });
-      // Image placeholder (can be customized later per card).
-      const img = el.querySelector('img');
-      if (img) img.src = placeholderImageUrl;
-      return el;
-    });
+    const items = category.files.map((file) => ({
+      image: placeholderImageUrl,
+      title: file.name,
+      subtitle: category.title ?? category.key,
+      handle: '',
+      borderColor: theme.borderColor,
+      gradient: theme.gradient,
+      url: resolveSiteUrl(prefix, file.url)
+    }));
 
-    // Pass wrapper height to the container element so mountCardSwap can use it.
-    const wrapperHeight = Number(page.getAttribute('data-swap-wrapper-height')) || 600;
-    container.setAttribute('data-swap-wrapper-height', String(wrapperHeight));
-
-    mountCardSwap(container, cards, {
-      delayMs: swapDelayMs,
-      pauseOnHover,
-      cardDistance,
-      verticalDistance,
-      width,
-      height,
-      skewAmount,
-      easing
+    mountChromaGrid(container, items, {
+      radius: chromaRadius,
+      columns: chromaColumns,
+      rows: chromaRows,
+      damping: chromaDamping,
+      fadeOut: chromaFadeOut,
+      ease: chromaEase,
+      height: chromaHeight
     });
   }
 
