@@ -194,7 +194,7 @@ function createPdfCard({ title, url }) {
 
 function createPdfSwapCard({ title, categoryTitle, url }) {
   const article = document.createElement('article');
-  article.className = 'card rounded-xl overflow-hidden shadow-md';
+  article.className = 'card rounded-xl overflow-hidden shadow-md border border-white bg-black';
   article.style.transformStyle = 'preserve-3d';
   article.style.willChange = 'transform';
   article.style.backfaceVisibility = 'hidden';
@@ -255,12 +255,21 @@ function mountCardSwap(
     return { stop() {}, start() {} };
   }
 
-  // Prepare container.
+  // Prepare wrapper (relative), and an inner swap container (absolute) that mimics ReactBits positioning.
   container.innerHTML = '';
   container.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-8');
-  container.classList.add('card-swap-container');
-  container.style.width = `${Number(width) || 500}px`;
-  container.style.height = `${Number(height) || 400}px`;
+
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'relative';
+  wrapper.style.height = `${Math.max(200, Number(container.getAttribute('data-swap-wrapper-height')) || 600)}px`;
+
+  const swapContainer = document.createElement('div');
+  swapContainer.className = 'card-swap-container';
+  swapContainer.style.width = `${Number(width) || 500}px`;
+  swapContainer.style.height = `${Number(height) || 400}px`;
+
+  wrapper.appendChild(swapContainer);
+  container.appendChild(wrapper);
 
   const config =
     easing === 'elastic'
@@ -289,7 +298,7 @@ function mountCardSwap(
       const img = el.querySelector('img');
       if (img) img.src = imageUrl;
     }
-    container.appendChild(el);
+    swapContainer.appendChild(el);
   }
 
   const total = cardElements.length;
@@ -396,8 +405,8 @@ function mountCardSwap(
       tl?.play();
       intervalId = window.setInterval(swap, Math.max(500, Number(delayMs) || 5000));
     };
-    container.addEventListener('mouseenter', pause);
-    container.addEventListener('mouseleave', resume);
+    swapContainer.addEventListener('mouseenter', pause);
+    swapContainer.addEventListener('mouseleave', resume);
   }
 
   start();
@@ -450,6 +459,10 @@ async function renderAbstracts() {
       if (img) img.src = placeholderImageUrl;
       return el;
     });
+
+    // Pass wrapper height to the container element so mountCardSwap can use it.
+    const wrapperHeight = Number(page.getAttribute('data-swap-wrapper-height')) || 600;
+    container.setAttribute('data-swap-wrapper-height', String(wrapperHeight));
 
     mountCardSwap(container, cards, {
       delayMs: swapDelayMs,
