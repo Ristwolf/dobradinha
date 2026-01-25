@@ -62,6 +62,12 @@ function initTabs() {
     const gsap = window.gsap;
     if (!gsap?.fromTo) return;
 
+    // Avoid fighting the CardSwap transforms.
+    if (panel.querySelector('.card-swap-container')) {
+      gsap.fromTo(panel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'power1.out' });
+      return;
+    }
+
     const cards = panel.querySelectorAll('.card');
     if (cards.length === 0) {
       gsap.fromTo(panel, { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: 0.25, ease: 'power1.out' });
@@ -188,35 +194,54 @@ function createPdfCard({ title, url }) {
 
 function createPdfSwapCard({ title, categoryTitle, url }) {
   const article = document.createElement('article');
-  article.className = 'bg-white rounded-lg overflow-hidden shadow-md card';
-  article.style.position = 'absolute';
-  article.style.inset = '0';
+  article.className = 'card rounded-xl overflow-hidden shadow-md';
+  article.style.transformStyle = 'preserve-3d';
+  article.style.willChange = 'transform';
+  article.style.backfaceVisibility = 'hidden';
+  article.style.webkitBackfaceVisibility = 'hidden';
 
   article.innerHTML = `
-    <div class="p-6 h-full flex flex-col justify-between">
-      <div>
-        <div class="text-sm text-gray-500 mb-2"></div>
-        <h3 class="text-xl font-bold text-gray-800 mb-3"></h3>
+    <div class="relative w-full h-full">
+      <img alt="" class="w-full h-full object-cover" />
+
+      <div class="absolute inset-x-0 top-0 p-4 bg-black/55">
+        <div class="text-xs text-white/80 mb-1"></div>
+        <h3 class="text-lg md:text-xl font-bold text-white leading-snug"></h3>
       </div>
-      <div class="flex items-center justify-between">
-        <a class="text-amber-600 hover:text-amber-700 font-medium inline-flex items-center" target="_blank" rel="noopener">
-          <span>Abrir PDF</span>
-          <i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
+
+      <div class="absolute inset-x-0 bottom-0 p-4 flex justify-end">
+        <a class="inline-flex items-center gap-2 rounded-lg bg-white/90 px-4 py-2 text-gray-900 hover:bg-white transition" target="_blank" rel="noopener">
+          <span class="font-medium">Abrir PDF</span>
+          <i data-feather="arrow-right" class="w-4 h-4"></i>
         </a>
       </div>
     </div>
   `;
 
   article.querySelector('h3').textContent = title;
-  article.querySelector('div.text-sm').textContent = categoryTitle;
+  article.querySelector('div.text-xs').textContent = categoryTitle;
   article.querySelector('a').href = url;
   return article;
 }
 
-function mountCardSwap(container, cardElements, { delayMs = 3500, pauseOnHover = true } = {}) {
-  // Fallback: if GSAP isn't available, show as a normal vertical list.
+function mountCardSwap(
+  container,
+  cardElements,
+  {
+    delayMs = 5000,
+    pauseOnHover = false,
+    cardDistance = 60,
+    verticalDistance = 70,
+    skewAmount = 6,
+    easing = 'elastic',
+    width = 500,
+    height = 400,
+    imageUrl = ''
+  } = {}
+) {
   const gsap = window.gsap;
-  if (!gsap?.to || cardElements.length === 0) {
+  // Fallback: if GSAP isn't available, show as a normal grid.
+  if (!gsap?.timeline || cardElements.length === 0) {
     container.classList.remove('relative');
     container.innerHTML = '';
     const list = document.createElement('div');
@@ -230,82 +255,149 @@ function mountCardSwap(container, cardElements, { delayMs = 3500, pauseOnHover =
     return { stop() {}, start() {} };
   }
 
+  // Prepare container.
   container.innerHTML = '';
-  container.classList.add('relative');
-  // Ensure the stack has height, otherwise absolutely-positioned cards won't be visible.
-  container.classList.add('h-72', 'md:h-80');
+  container.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-8');
+  container.classList.add('card-swap-container');
+  container.style.width = `${Number(width) || 500}px`;
+  container.style.height = `${Number(height) || 400}px`;
 
-  const cards = [...cardElements];
-  // Add in reverse so the first item ends up on top initially.
-  for (let i = cards.length - 1; i >= 0; i -= 1) {
-    container.appendChild(cards[i]);
-  }
+  const config =
+    easing === 'elastic'
+      ? {
+          ease: 'elastic.out(0.6,0.9)',
+          durDrop: 2,
+          durMove: 2,
+          durReturn: 2,
+          promoteOverlap: 0.9,
+          returnDelay: 0.05
+        }
+      : {
+          ease: 'power1.inOut',
+          durDrop: 0.8,
+          durMove: 0.8,
+          durReturn: 0.8,
+          promoteOverlap: 0.45,
+          returnDelay: 0.2
+        };
 
-  const visibleDepth = 4;
-  const yStep = 10;
-  const scaleStep = 0.03;
-
-  function layout() {
-    for (let i = 0; i < cards.length; i += 1) {
-      const el = cards[i];
-      const isVisible = i < visibleDepth;
-      gsap.set(el, {
-        zIndex: cards.length - i,
-        x: 0,
-        y: isVisible ? i * yStep : visibleDepth * yStep,
-        rotation: 0,
-        scale: isVisible ? 1 - i * scaleStep : 1 - visibleDepth * scaleStep,
-        autoAlpha: isVisible ? 1 : 0
-      });
+  // Set images and sizes.
+  for (const el of cardElements) {
+    el.style.width = `${Number(width) || 500}px`;
+    el.style.height = `${Number(height) || 400}px`;
+    if (imageUrl) {
+      const img = el.querySelector('img');
+      if (img) img.src = imageUrl;
     }
+    container.appendChild(el);
   }
 
-  layout();
+  const total = cardElements.length;
+  const order = Array.from({ length: total }, (_, i) => i);
 
-  let timer = null;
-  let isPaused = false;
-  let isAnimating = false;
+  const makeSlot = (i) => ({
+    x: i * cardDistance,
+    y: -i * verticalDistance,
+    z: -i * cardDistance * 1.5,
+    zIndex: total - i
+  });
 
-  function swapOnce() {
-    if (isPaused || isAnimating || cards.length <= 1) return;
-    isAnimating = true;
-
-    const top = cards[0];
-    gsap.to(top, {
-      x: 44,
-      y: -6,
-      rotation: 6,
-      autoAlpha: 0,
-      duration: 0.35,
-      ease: 'power1.inOut',
-      onComplete: () => {
-        cards.shift();
-        cards.push(top);
-        container.insertBefore(top, container.firstChild);
-        gsap.set(top, { x: 0, y: 0, rotation: 0 });
-        layout();
-        isAnimating = false;
-      }
+  const placeNow = (el, slot) =>
+    gsap.set(el, {
+      x: slot.x,
+      y: slot.y,
+      z: slot.z,
+      xPercent: -50,
+      yPercent: -50,
+      skewY: skewAmount,
+      transformOrigin: 'center center',
+      zIndex: slot.zIndex,
+      force3D: true
     });
-  }
 
-  function start() {
+  order.forEach((idx, i) => placeNow(cardElements[idx], makeSlot(i)));
+
+  let tl = null;
+  let intervalId = null;
+
+  const swap = () => {
+    if (order.length < 2) return;
+
+    const front = order[0];
+    const rest = order.slice(1);
+    const elFront = cardElements[front];
+
+    tl = gsap.timeline();
+
+    tl.to(elFront, {
+      y: '+=500',
+      duration: config.durDrop,
+      ease: config.ease
+    });
+
+    tl.addLabel('promote', `-=${config.durDrop * config.promoteOverlap}`);
+    rest.forEach((idx, i) => {
+      const el = cardElements[idx];
+      const slot = makeSlot(i);
+      tl.set(el, { zIndex: slot.zIndex }, 'promote');
+      tl.to(
+        el,
+        {
+          x: slot.x,
+          y: slot.y,
+          z: slot.z,
+          duration: config.durMove,
+          ease: config.ease
+        },
+        `promote+=${i * 0.15}`
+      );
+    });
+
+    const backSlot = makeSlot(total - 1);
+    tl.addLabel('return', `promote+=${config.durMove * config.returnDelay}`);
+    tl.call(() => {
+      gsap.set(elFront, { zIndex: backSlot.zIndex });
+    }, undefined, 'return');
+    tl.to(
+      elFront,
+      {
+        x: backSlot.x,
+        y: backSlot.y,
+        z: backSlot.z,
+        duration: config.durReturn,
+        ease: config.ease
+      },
+      'return'
+    );
+
+    tl.call(() => {
+      order.splice(0, 1);
+      order.push(front);
+    });
+  };
+
+  const start = () => {
     stop();
-    timer = window.setInterval(swapOnce, Math.max(1000, Number(delayMs) || 3500));
-  }
+    swap();
+    intervalId = window.setInterval(swap, Math.max(500, Number(delayMs) || 5000));
+  };
 
-  function stop() {
-    if (timer) window.clearInterval(timer);
-    timer = null;
-  }
+  const stop = () => {
+    if (intervalId) window.clearInterval(intervalId);
+    intervalId = null;
+  };
 
   if (pauseOnHover) {
-    container.addEventListener('mouseenter', () => {
-      isPaused = true;
-    });
-    container.addEventListener('mouseleave', () => {
-      isPaused = false;
-    });
+    const pause = () => {
+      tl?.pause();
+      stop();
+    };
+    const resume = () => {
+      tl?.play();
+      intervalId = window.setInterval(swap, Math.max(500, Number(delayMs) || 5000));
+    };
+    container.addEventListener('mouseenter', pause);
+    container.addEventListener('mouseleave', resume);
   }
 
   start();
@@ -317,7 +409,14 @@ async function renderAbstracts() {
   if (!page) return;
 
   const prefix = getSiteRelativePrefix();
-  const swapDelayMs = Number(page.getAttribute('data-swap-delay-ms')) || 3500;
+  const swapDelayMs = Number(page.getAttribute('data-swap-delay-ms')) || 5000;
+  const pauseOnHover = String(page.getAttribute('data-swap-pause-on-hover') ?? 'false') === 'true';
+  const cardDistance = Number(page.getAttribute('data-swap-card-distance')) || 60;
+  const verticalDistance = Number(page.getAttribute('data-swap-vertical-distance')) || 70;
+  const width = Number(page.getAttribute('data-swap-card-width')) || 500;
+  const height = Number(page.getAttribute('data-swap-card-height')) || 400;
+  const skewAmount = Number(page.getAttribute('data-swap-skew')) || 6;
+  const easing = page.getAttribute('data-swap-easing') || 'elastic';
 
   let data;
   try {
@@ -338,15 +437,30 @@ async function renderAbstracts() {
       continue;
     }
 
-    const cards = category.files.map((file) =>
-      createPdfSwapCard({
+    const placeholderImageUrl = resolveSiteUrl(prefix, 'img/j.jpeg');
+
+    const cards = category.files.map((file) => {
+      const el = createPdfSwapCard({
         title: file.name,
         categoryTitle: category.title ?? category.key,
         url: resolveSiteUrl(prefix, file.url)
-      })
-    );
+      });
+      // Image placeholder (can be customized later per card).
+      const img = el.querySelector('img');
+      if (img) img.src = placeholderImageUrl;
+      return el;
+    });
 
-    mountCardSwap(container, cards, { delayMs: swapDelayMs, pauseOnHover: true });
+    mountCardSwap(container, cards, {
+      delayMs: swapDelayMs,
+      pauseOnHover,
+      cardDistance,
+      verticalDistance,
+      width,
+      height,
+      skewAmount,
+      easing
+    });
   }
 
   initAosAndFeather();

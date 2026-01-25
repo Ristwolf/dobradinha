@@ -72,6 +72,20 @@
   display: none;
 }
 
+.card-swap-container {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  perspective: 900px;
+  overflow: visible;
+}
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
 .video-wrap {
   position: relative;
   width: 100%;
