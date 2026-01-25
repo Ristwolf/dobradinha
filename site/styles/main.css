@@ -1,5 +1,10 @@
 /* Shared styles extracted from inline <style> blocks */
 
+/* Override Tailwind's bg-gray-50 to use the requested light gray */
+.bg-gray-50 {
+  background-color: rgb(203, 202, 202);
+}
+
 .hero-bg {
   background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
     url('http://static.photos/workspace/1200x630/42');
