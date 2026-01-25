@@ -34,39 +34,115 @@ function initTabs() {
   const panels = document.querySelectorAll('.tab-panel');
   if (tabs.length === 0 || panels.length === 0) return;
 
-  function activateTab(targetKey) {
+  const isAbstractsPage = Boolean(document.querySelector('[data-page="abstracts"]'));
+  const hashAliases = isAbstractsPage
+    ? {
+        historia: 'history',
+        ministerio: 'ministry',
+        teologia: 'theology',
+        'vida-crista': 'christian-life'
+      }
+    : {};
+
+  function canonicalizeKey(key) {
+    if (!key) return '';
+    return hashAliases[key] ?? key;
+  }
+
+  function setHashWithoutJump(key) {
+    try {
+      history.replaceState(null, '', `#${encodeURIComponent(key)}`);
+    } catch {
+      // ignore
+    }
+  }
+
+  function animatePanel(panel) {
+    if (!isAbstractsPage) return;
+    const gsap = window.gsap;
+    if (!gsap?.fromTo) return;
+
+    const cards = panel.querySelectorAll('.card');
+    if (cards.length === 0) {
+      gsap.fromTo(panel, { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: 0.25, ease: 'power1.out' });
+      return;
+    }
+
+    gsap.fromTo(
+      cards,
+      { autoAlpha: 0, y: 10 },
+      { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power1.out', stagger: 0.04, clearProps: 'opacity,transform' }
+    );
+  }
+
+  function activateTab(targetKey, { setHash = false } = {}) {
+    const key = canonicalizeKey(targetKey);
+
     tabs.forEach((tab) => {
-      const active = tab.dataset.target === targetKey;
+      const active = tab.dataset.target === key;
       tab.setAttribute('aria-selected', active ? 'true' : 'false');
     });
     panels.forEach((panel) => {
-      const match = panel.dataset.panel === targetKey;
+      const match = panel.dataset.panel === key;
       panel.classList.toggle('hidden-panel', !match);
+
+      if (match) {
+        animatePanel(panel);
+      }
     });
+
+    if (setHash) setHashWithoutJump(key);
   }
 
   tabs.forEach((tab) => {
-    tab.addEventListener('click', () => activateTab(tab.dataset.target));
+    tab.addEventListener('click', () => activateTab(tab.dataset.target, { setHash: isAbstractsPage }));
     tab.addEventListener('keydown', (e) => {
       const idx = Array.from(tabs).indexOf(tab);
       if (e.key === 'ArrowRight') {
         const next = tabs[(idx + 1) % tabs.length];
         next.focus();
-        activateTab(next.dataset.target);
+        activateTab(next.dataset.target, { setHash: isAbstractsPage });
       } else if (e.key === 'ArrowLeft') {
         const prev = tabs[(idx - 1 + tabs.length) % tabs.length];
         prev.focus();
-        activateTab(prev.dataset.target);
+        activateTab(prev.dataset.target, { setHash: isAbstractsPage });
       }
     });
   });
 
-  const hash = window.location.hash.replace('#', '');
-  if (hash && document.querySelector(`[data-target="${CSS.escape(hash)}"]`)) {
-    activateTab(hash);
+  function activateFromHash() {
+    let hash = window.location.hash.replace('#', '');
+    try {
+      hash = decodeURIComponent(hash);
+    } catch {
+      // ignore
+    }
+
+    const canonical = canonicalizeKey(hash);
+    if (hash && canonical !== hash) setHashWithoutJump(canonical);
+
+    if (canonical && document.querySelector(`[data-target="${CSS.escape(canonical)}"]`)) {
+      activateTab(canonical);
+      return;
+    }
+
+    activateTab(tabs[0].dataset.target);
+  }
+
+  window.addEventListener('hashchange', activateFromHash);
+  if (isAbstractsPage) {
+    // For non-abstracts pages, we don't want to hijack hash navigation.
+    activateFromHash();
   } else {
     activateTab(tabs[0].dataset.target);
   }
+}
+
+function resolveSiteUrl(prefix, url) {
+  if (!url) return url;
+  if (/^https?:\/\//i.test(url)) return url;
+  if (url.startsWith('/')) return url;
+  return prefix + url.replace(/^\.\//, '');
 }
 
 async function fetchJson(url) {
@@ -114,9 +190,10 @@ async function renderAbstracts() {
   const page = document.querySelector('[data-page="abstracts"]');
   if (!page) return;
 
+  const prefix = getSiteRelativePrefix();
+
   let data;
   try {
-    const prefix = getSiteRelativePrefix();
     data = await fetchJson(prefix + 'data/abstracts.json');
   } catch {
     return;
@@ -135,7 +212,7 @@ async function renderAbstracts() {
     }
 
     for (const file of category.files) {
-      container.appendChild(createPdfCard({ title: file.name, url: file.url }));
+      container.appendChild(createPdfCard({ title: file.name, url: resolveSiteUrl(prefix, file.url) }));
     }
   }
 

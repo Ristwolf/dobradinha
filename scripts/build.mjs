@@ -19,6 +19,19 @@ async function copyDir(src, dest) {
   await cp(src, dest, { recursive: true });
 }
 
+async function copyAbstractsCategories({ abstractsSrc, abstractsDest }) {
+  const categoryDirs = ['bible', 'family', 'history', 'ministry', 'theology', 'christian-life'];
+  await ensureDir(abstractsDest);
+
+  // Copy per-category so we preserve the hand-authored page at site/abstracts/index.html.
+  for (const category of categoryDirs) {
+    const srcDir = path.join(abstractsSrc, category);
+    const destDir = path.join(abstractsDest, category);
+    await rm(destDir, { recursive: true, force: true });
+    await cp(srcDir, destDir, { recursive: true });
+  }
+}
+
 async function main() {
   await ensureDir(siteDir);
   await ensureDir(outDataDir);
@@ -31,7 +44,7 @@ async function main() {
 
   const abstractsSrc = path.join(repoRoot, 'abstracts');
   const abstractsDest = path.join(siteDir, 'abstracts');
-  await copyDir(abstractsSrc, abstractsDest);
+  await copyAbstractsCategories({ abstractsSrc, abstractsDest });
 
   // Prevent Jekyll processing on GitHub Pages.
   await writeFile(path.join(siteDir, '.nojekyll'), '', 'utf8');

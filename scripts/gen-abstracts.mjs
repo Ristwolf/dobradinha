@@ -40,27 +40,39 @@ function humanizeFilename(fileName) {
 export async function generateAbstractsJson({ siteDir }) {
   const abstractsRoot = path.join(siteDir, 'abstracts');
 
-  const categories = await readdir(abstractsRoot, { withFileTypes: true });
-  const categoryKeys = categories
-    .filter((d) => d.isDirectory())
-    .map((d) => d.name)
-    .sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const categoryDefs = [
+    { key: 'bible', title: 'Bíblia' },
+    { key: 'family', title: 'Família' },
+    { key: 'history', title: 'História' },
+    { key: 'ministry', title: 'Ministério' },
+    { key: 'theology', title: 'Teologia' },
+    { key: 'christian-life', title: 'Vida Cristã' }
+  ];
 
   const result = {
     generatedAt: new Date().toISOString(),
     categories: []
   };
 
-  for (const key of categoryKeys) {
-    const categoryDir = path.join(abstractsRoot, key);
+  for (const category of categoryDefs) {
+    const categoryDir = path.join(abstractsRoot, category.key);
 
-    // If there are nested folders later, this still works.
-    const pdfPaths = await listPdfFilesRecursively(categoryDir);
+    let pdfPaths = [];
+    try {
+      const st = await stat(categoryDir);
+      if (st.isDirectory()) {
+        // If there are nested folders later, this still works.
+        pdfPaths = await listPdfFilesRecursively(categoryDir);
+      }
+    } catch {
+      // Category folder missing; keep empty.
+    }
+
     pdfPaths.sort((a, b) => a.localeCompare(b, 'pt-BR'));
 
     const files = pdfPaths.map((absPath) => {
       const relFromSite = path.relative(siteDir, absPath);
-      const url = './' + toUrlPath(relFromSite);
+      const url = toUrlPath(relFromSite);
       return {
         name: humanizeFilename(path.basename(absPath)),
         url
@@ -68,8 +80,8 @@ export async function generateAbstractsJson({ siteDir }) {
     });
 
     result.categories.push({
-      key,
-      title: key,
+      key: category.key,
+      title: category.title,
       count: files.length,
       files
     });
