@@ -72,92 +72,45 @@
   display: none;
 }
 
-.chroma-grid {
+.masonry-mount {
+  width: 100%;
+}
+
+.masonry-list {
   position: relative;
   width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: repeat(var(--cols, 3), 320px);
-  grid-auto-rows: auto;
-  justify-content: center;
-  gap: 0.75rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-  box-sizing: border-box;
-
-  --x: 50%;
-  --y: 50%;
-  --r: 220px;
 }
 
-@media (max-width: 1124px) {
-  .chroma-grid {
-    grid-template-columns: repeat(auto-fit, minmax(320px, 320px));
-    gap: 0.5rem;
-    padding: 0.5rem;
-  }
+.masonry-item-wrapper {
+  position: absolute;
+  will-change: transform, width, height, opacity;
+  padding: 6px;
+  cursor: pointer;
+  top: 0;
+  left: 0;
 }
 
-@media (max-width: 480px) {
-  .chroma-grid {
-    grid-template-columns: 320px;
-    gap: 0.75rem;
-    padding: 1rem;
-  }
-}
-
-.chroma-card {
+.masonry-item-img {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 320px;
-  height: auto;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid #333;
-  transition: border-color 0.3s ease;
-  background: var(--card-gradient);
-
-}
-
-.chroma-card:hover {
-  border-color: var(--card-border);
-}
-
-
-.chroma-img-wrapper {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  padding: 10px;
-  box-sizing: border-box;
-  background: transparent;
-  transition: background 0.3s ease;
-}
-
-.chroma-img-wrapper img {
+  background-size: cover;
+  background-position: center center;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border-radius: 10px;
-  display: block;
+  box-shadow: 0px 10px 50px -10px rgba(0, 0, 0, 0.2);
+  filter: grayscale(1);
 }
 
-.chroma-info {
-  position: relative;
-  z-index: 1;
-  padding: 0.75rem 1rem;
-  color: #fff;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  row-gap: 0.25rem;
-  column-gap: 0.75rem;
-}
-
-.chroma-info .role,
-.chroma-info .handle {
-  color: #aaa;
+.masonry-color-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(255,0,150,0.5), rgba(0,150,255,0.5));
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 10px;
 }
 
 

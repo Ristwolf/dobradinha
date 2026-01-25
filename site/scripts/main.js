@@ -63,7 +63,7 @@ function initTabs() {
     if (!gsap?.fromTo) return;
 
     // Keep this simple to avoid fighting component animations.
-    if (panel.querySelector('.chroma-grid')) {
+    if (panel.querySelector('.masonry-list')) {
       gsap.fromTo(panel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'power1.out' });
       return;
     }
@@ -97,6 +97,14 @@ function initTabs() {
         animatePanel(panel);
       }
     });
+
+    if (isAbstractsPage) {
+      try {
+        window.__abstractsMasonry?.activate?.(key);
+      } catch {
+        // ignore
+      }
+    }
 
     if (setHash) setHashWithoutJump(key);
   }
@@ -193,77 +201,294 @@ function createPdfCard({ title, url }) {
   return article;
 }
 
-function createChromaCard({ image, title, subtitle, handle, borderColor, gradient, url }) {
-  const card = document.createElement('article');
-  card.className = 'chroma-card';
-  card.style.setProperty('--card-border', borderColor || 'transparent');
-  card.style.setProperty('--card-gradient', gradient || 'linear-gradient(145deg, #111, #000)');
-  card.style.cursor = url ? 'pointer' : 'default';
-
-  card.innerHTML = `
-    <div class="chroma-img-wrapper">
-      <img loading="lazy" />
-    </div>
-    <footer class="chroma-info">
-      <h3 class="name"></h3>
-      <span class="handle"></span>
-      <p class="role"></p>
-    </footer>
-  `;
-
-  const img = card.querySelector('img');
-  img.src = image;
-  img.alt = title;
-
-  card.querySelector('.name').textContent = title;
-  const handleEl = card.querySelector('.handle');
-  if (handle) {
-    handleEl.textContent = handle;
-  } else {
-    handleEl.remove();
+function hashStringToInt(str) {
+  // Small deterministic hash (FNV-1a-ish)
+  let hash = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
   }
-  card.querySelector('.role').textContent = subtitle || '';
-
-  card.addEventListener('click', () => {
-    if (!url) return;
-    window.open(url, '_blank', 'noopener,noreferrer');
-  });
-
-  return card;
+  return hash >>> 0;
 }
 
-function mountChromaGrid(
-  container,
-  items,
-  {
-    radius = 300,
-    columns = 3,
-    rows = 2,
-    damping = 0.45,
-    fadeOut = 0.6,
-    ease = 'power3.out',
-    height = 600
-  } = {}
+function preloadImages(urls) {
+  return Promise.all(
+    urls.map(
+      (src) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = img.onerror = () => resolve();
+        })
+    )
+  );
+}
 
-) {
-  container.innerHTML = '';
-  container.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-8');
+function createMasonry(container, initialItems, options = {}) {
+  const {
+    ease = 'sine.out',
+    duration = 0.6,
+    stagger = 0.05,
+    animateFrom = 'top',
+    scaleOnHover = true,
+    hoverScale = 0.95,
+    blurToFocus = false,
+    colorShiftOnHover = true
+  } = options;
 
-  const wrapper = document.createElement('div');
-  wrapper.style.height = `${Number(height) || 600}px`;
-  wrapper.style.position = 'relative';
+  const gsap = window.gsap;
+  const queries = ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)', '(min-width:400px)'];
+  const values = [5, 4, 3, 2];
+  const media = queries.map((q) => matchMedia(q));
 
-  const root = document.createElement('div');
-  root.className = 'chroma-grid';
-  root.style.setProperty('--r', `${radius}px`);
-  root.style.setProperty('--cols', String(columns));
-  root.style.setProperty('--rows', String(rows));
-
-  for (const item of items) {
-    root.appendChild(createChromaCard(item));
+  function getColumns() {
+    const idx = media.findIndex((m) => m.matches);
+    return values[idx] ?? 1;
   }
-  wrapper.appendChild(root);
-  container.appendChild(wrapper);
+
+  let items = Array.isArray(initialItems) ? initialItems : [];
+  let imagesReady = false;
+  let hasMounted = false;
+  let grid = [];
+
+  container.classList.add('masonry-list');
+  container.style.position = 'relative';
+  container.style.width = '100%';
+
+  const elementsById = new Map();
+  let resizeObserver = null;
+
+  function getInitialPosition(item) {
+    const containerRect = container.getBoundingClientRect();
+    let direction = animateFrom;
+
+    if (animateFrom === 'random') {
+      const dirs = ['top', 'bottom', 'left', 'right'];
+      direction = dirs[Math.floor(Math.random() * dirs.length)];
+    }
+
+    switch (direction) {
+      case 'top':
+        return { x: item.x, y: -200 };
+      case 'bottom':
+        return { x: item.x, y: window.innerHeight + 200 };
+      case 'left':
+        return { x: -200, y: item.y };
+      case 'right':
+        return { x: window.innerWidth + 200, y: item.y };
+      case 'center':
+        return {
+          x: containerRect.width / 2 - item.w / 2,
+          y: containerRect.height / 2 - item.h / 2
+        };
+      default:
+        return { x: item.x, y: item.y + 100 };
+    }
+  }
+
+  function ensureElements() {
+    // Rebuild DOM if ids mismatch.
+    const ids = new Set(items.map((i) => String(i.id)));
+    let needsRebuild = false;
+
+    for (const id of elementsById.keys()) {
+      if (!ids.has(id)) {
+        needsRebuild = true;
+        break;
+      }
+    }
+    if (!needsRebuild) {
+      for (const id of ids) {
+        if (!elementsById.has(id)) {
+          needsRebuild = true;
+          break;
+        }
+      }
+    }
+
+    if (!needsRebuild) return;
+
+    container.innerHTML = '';
+    elementsById.clear();
+
+    const fragment = document.createDocumentFragment();
+
+    for (const item of items) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'masonry-item-wrapper';
+      wrapper.dataset.key = String(item.id);
+
+      const img = document.createElement('div');
+      img.className = 'masonry-item-img';
+      img.style.backgroundImage = `url(${item.img})`;
+
+      if (colorShiftOnHover) {
+        const overlay = document.createElement('div');
+        overlay.className = 'masonry-color-overlay';
+        img.appendChild(overlay);
+      }
+
+      wrapper.appendChild(img);
+
+      wrapper.addEventListener('click', () => {
+        if (!item.url) return;
+        window.open(item.url, '_blank', 'noopener');
+      });
+
+      wrapper.addEventListener('mouseenter', () => {
+        if (scaleOnHover && gsap?.to) {
+          gsap.to(wrapper, { scale: hoverScale, duration: 0.3, ease: 'power2.out' });
+        }
+        if (colorShiftOnHover && gsap?.to) {
+          const overlay = wrapper.querySelector('.masonry-color-overlay');
+          if (overlay) gsap.to(overlay, { opacity: 0.3, duration: 0.3 });
+        }
+      });
+
+      wrapper.addEventListener('mouseleave', () => {
+        if (scaleOnHover && gsap?.to) {
+          gsap.to(wrapper, { scale: 1, duration: 0.3, ease: 'power2.out' });
+        }
+        if (colorShiftOnHover && gsap?.to) {
+          const overlay = wrapper.querySelector('.masonry-color-overlay');
+          if (overlay) gsap.to(overlay, { opacity: 0, duration: 0.3 });
+        }
+      });
+
+      elementsById.set(String(item.id), wrapper);
+      fragment.appendChild(wrapper);
+    }
+
+    container.appendChild(fragment);
+  }
+
+  function computeGrid(width) {
+    const columns = getColumns();
+    const colHeights = new Array(columns).fill(0);
+    const columnWidth = width / columns;
+
+    const out = items.map((child) => {
+      const col = colHeights.indexOf(Math.min(...colHeights));
+      const x = columnWidth * col;
+      const h = Math.max(160, Math.round((Number(child.height) || 400) / 2));
+      const y = colHeights[col];
+      colHeights[col] += h;
+
+      return { ...child, x, y, w: columnWidth, h };
+    });
+
+    const maxHeight = Math.max(0, ...colHeights);
+    container.style.height = `${Math.ceil(maxHeight)}px`;
+    return out;
+  }
+
+  function layout() {
+    const width = container.clientWidth;
+    if (!width) return;
+    if (!gsap?.to) return;
+
+    grid = computeGrid(width);
+    ensureElements();
+
+    grid.forEach((item, index) => {
+      const el = elementsById.get(String(item.id));
+      if (!el) return;
+
+      const animationProps = { x: item.x, y: item.y, width: item.w, height: item.h };
+
+      if (!hasMounted) {
+        const initialPos = getInitialPosition(item);
+        const initialState = {
+          opacity: 0,
+          x: initialPos.x,
+          y: initialPos.y,
+          width: item.w,
+          height: item.h,
+          ...(blurToFocus ? { filter: 'blur(10px)' } : {})
+        };
+
+        gsap.fromTo(
+          el,
+          initialState,
+          {
+            opacity: 1,
+            ...animationProps,
+            ...(blurToFocus ? { filter: 'blur(0px)' } : {}),
+            duration: 0.8,
+            ease: 'power3.out',
+            delay: index * stagger
+          }
+        );
+      } else {
+        gsap.to(el, { ...animationProps, duration, ease, overwrite: 'auto' });
+      }
+    });
+
+    hasMounted = true;
+  }
+
+  let preloadToken = 0;
+  async function setItems(nextItems) {
+    items = Array.isArray(nextItems) ? nextItems : [];
+    imagesReady = false;
+    hasMounted = false;
+    preloadToken += 1;
+    const token = preloadToken;
+
+    ensureElements();
+
+    try {
+      await preloadImages(items.map((i) => i.img));
+    } catch {
+      // ignore
+    }
+
+    if (token !== preloadToken) return;
+    imagesReady = true;
+    // If the panel is currently hidden, width will be 0; layout will run on activation.
+    requestAnimationFrame(() => layout());
+  }
+
+  function relayout() {
+    if (!imagesReady) return;
+    requestAnimationFrame(() => layout());
+  }
+
+  function destroy() {
+    try {
+      resizeObserver?.disconnect();
+    } catch {
+      // ignore
+    }
+    resizeObserver = null;
+
+    const handler = () => relayout();
+    for (const m of media) {
+      try {
+        m.removeEventListener('change', handler);
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  // Observe size and media changes.
+  resizeObserver = new ResizeObserver(() => relayout());
+  resizeObserver.observe(container);
+
+  const handler = () => relayout();
+  for (const m of media) {
+    try {
+      m.addEventListener('change', handler);
+    } catch {
+      // ignore
+    }
+  }
+
+  // Kick off.
+  setItems(items);
+
+  return { setItems, relayout, destroy };
 }
 
 async function renderAbstracts() {
@@ -272,14 +497,6 @@ async function renderAbstracts() {
 
   const prefix = getSiteRelativePrefix();
 
-  const chromaRadius = Number(page.getAttribute('data-chroma-radius')) || 300;
-  const chromaColumns = Number(page.getAttribute('data-chroma-columns')) || 3;
-  const chromaRows = Number(page.getAttribute('data-chroma-rows')) || 2;
-  const chromaDamping = Number(page.getAttribute('data-chroma-damping')) || 0.45;
-  const chromaFadeOut = Number(page.getAttribute('data-chroma-fade-out')) || 0.6;
-  const chromaEase = page.getAttribute('data-chroma-ease') || 'power3.out';
-  const chromaHeight = Number(page.getAttribute('data-chroma-height')) || 600;
-
   let data;
   try {
     data = await fetchJson(prefix + 'data/abstracts.json');
@@ -287,50 +504,83 @@ async function renderAbstracts() {
     return;
   }
 
-  const placeholderImageUrl = resolveSiteUrl(prefix, 'img/j.jpeg');
-  const themeByKey = {
-    bible: { borderColor: '#4F46E5', gradient: 'linear-gradient(145deg, #4F46E5, #000)' },
-    family: { borderColor: '#10B981', gradient: 'linear-gradient(210deg, #10B981, #000)' },
-    history: { borderColor: '#F59E0B', gradient: 'linear-gradient(165deg, #F59E0B, #000)' },
-    ministry: { borderColor: '#EF4444', gradient: 'linear-gradient(195deg, #EF4444, #000)' },
-    theology: { borderColor: '#8B5CF6', gradient: 'linear-gradient(225deg, #8B5CF6, #000)' },
-    'christian-life': { borderColor: '#06B6D4', gradient: 'linear-gradient(135deg, #06B6D4, #000)' }
-  };
+  const imagePool = [
+    'abacaxi.jpg',
+    'como_ler.jpg',
+    'como_estudar_tim.webp',
+    'discipulo_juan.jpeg',
+    'formacao_discipulo.jpg',
+    'hermeneutica_nelson.jpg',
+    'mente_crista.jpg',
+    'nunca_conheci.jpg',
+    'origens_reforma.jpg',
+    'pastoreando_crianca.jpg',
+    'pregando_cristo_sidney.jpg',
+    'screw_larry.jpg',
+    'silencio_adao.jpg',
+    'super_ocupado.jpg',
+    'taustin.jpg',
+    'j.jpeg'
+  ].map((f) => resolveSiteUrl(prefix, `img/${f}`));
 
+  const itemsByKey = new Map();
   for (const category of data.categories ?? []) {
-    const container = document.querySelector(`[data-abstracts-container="${CSS.escape(category.key)}"]`);
-    if (!container) continue;
+    const files = category.files ?? [];
+    const items = files.map((file, index) => {
+      const seed = hashStringToInt(`${category.key}:${file.name}`);
+      const img = imagePool[seed % imagePool.length];
+      const height = 250 + (seed % 650); // 250..899
+      return {
+        id: `${category.key}:${index}`,
+        img,
+        url: resolveSiteUrl(prefix, file.url),
+        height
+      };
+    });
+    itemsByKey.set(category.key, { title: category.title ?? category.key, items });
+  }
 
-    if (!category.files || category.files.length === 0) {
+  const instancesByKey = new Map();
+
+  function ensureMounted(key) {
+    const entry = itemsByKey.get(key);
+    const container = document.querySelector(`[data-abstracts-container="${CSS.escape(key)}"]`);
+    if (!container) return;
+
+    if (!entry || entry.items.length === 0) {
+      container.innerHTML = '';
       const empty = document.createElement('div');
       empty.className = 'text-gray-600';
       empty.textContent = 'Nenhum PDF encontrado nesta categoria.';
       container.appendChild(empty);
-      continue;
+      return;
     }
 
-    const theme = themeByKey[category.key] ?? { borderColor: '#4F46E5', gradient: 'linear-gradient(145deg, #4F46E5, #000)' };
-
-    const items = category.files.map((file) => ({
-      image: placeholderImageUrl,
-      title: file.name,
-      subtitle: category.title ?? category.key,
-      handle: '',
-      borderColor: theme.borderColor,
-      gradient: theme.gradient,
-      url: resolveSiteUrl(prefix, file.url)
-    }));
-
-    mountChromaGrid(container, items, {
-      radius: chromaRadius,
-      columns: chromaColumns,
-      rows: chromaRows,
-      damping: chromaDamping,
-      fadeOut: chromaFadeOut,
-      ease: chromaEase,
-      height: chromaHeight
-    });
+    if (!instancesByKey.has(key)) {
+      const instance = createMasonry(container, entry.items, {
+        ease: 'sine.out',
+        duration: 0.6,
+        stagger: 0.05,
+        animateFrom: 'top',
+        scaleOnHover: true,
+        hoverScale: 0.95,
+        blurToFocus: false,
+        colorShiftOnHover: true
+      });
+      instancesByKey.set(key, instance);
+    } else {
+      instancesByKey.get(key)?.relayout?.();
+    }
   }
+
+  window.__abstractsMasonry = {
+    activate: (key) => ensureMounted(key)
+  };
+
+  // Mount the current active panel (or first tab).
+  const activeTab = document.querySelector('[role="tab"][aria-selected="true"]');
+  const initialKey = activeTab?.getAttribute('data-target') || (data.categories?.[0]?.key ?? '');
+  if (initialKey) ensureMounted(initialKey);
 
   initAosAndFeather();
 }
