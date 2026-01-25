@@ -87,6 +87,7 @@ function initTabs() {
     tabs.forEach((tab) => {
       const active = tab.dataset.target === key;
       tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      tab.classList.toggle('tab-active', active);
     });
     panels.forEach((panel) => {
       const match = panel.dataset.panel === key;
@@ -223,15 +224,6 @@ function createChromaCard({ image, title, subtitle, handle, borderColor, gradien
   }
   card.querySelector('.role').textContent = subtitle || '';
 
-  function handleCardMove(e) {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    card.style.setProperty('--mouse-x', `${x}px`);
-    card.style.setProperty('--mouse-y', `${y}px`);
-  }
-
-  card.addEventListener('mousemove', handleCardMove);
   card.addEventListener('click', () => {
     if (!url) return;
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -252,10 +244,10 @@ function mountChromaGrid(
     ease = 'power3.out',
     height = 600
   } = {}
-) {
-  const gsap = window.gsap;
 
+) {
   container.innerHTML = '';
+  container.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-8');
 
   const wrapper = document.createElement('div');
   wrapper.style.height = `${Number(height) || 600}px`;
@@ -267,53 +259,11 @@ function mountChromaGrid(
   root.style.setProperty('--cols', String(columns));
   root.style.setProperty('--rows', String(rows));
 
-  const overlay = document.createElement('div');
-  overlay.className = 'chroma-overlay';
-  const fade = document.createElement('div');
-  fade.className = 'chroma-fade';
-
   for (const item of items) {
     root.appendChild(createChromaCard(item));
   }
-  root.appendChild(overlay);
-  root.appendChild(fade);
   wrapper.appendChild(root);
   container.appendChild(wrapper);
-
-  if (!gsap?.quickSetter) return;
-
-  const setX = gsap.quickSetter(root, '--x', 'px');
-  const setY = gsap.quickSetter(root, '--y', 'px');
-  const pos = { x: 0, y: 0 };
-
-  const { width, height: h } = root.getBoundingClientRect();
-  pos.x = width / 2;
-  pos.y = h / 2;
-  setX(pos.x);
-  setY(pos.y);
-
-  const moveTo = (x, y) => {
-    gsap.to(pos, {
-      x,
-      y,
-      duration: damping,
-      ease,
-      onUpdate: () => {
-        setX(pos.x);
-        setY(pos.y);
-      },
-      overwrite: true
-    });
-  };
-
-  root.addEventListener('pointermove', (e) => {
-    const r = root.getBoundingClientRect();
-    moveTo(e.clientX - r.left, e.clientY - r.top);
-    gsap.to(fade, { opacity: 0, duration: 0.25, overwrite: true });
-  });
-  root.addEventListener('pointerleave', () => {
-    gsap.to(fade, { opacity: 1, duration: fadeOut, overwrite: true });
-  });
 }
 
 async function renderAbstracts() {

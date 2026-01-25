@@ -62,7 +62,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="w-full overflow-x-auto" data-aos="fade-up">
-        <div class="inline-flex min-w-full md:min-w-0 gap-4 border-b border-gray-200 pb-2" role="tablist" aria-label="Categorias de resumos">
+        <div class="flex flex-wrap justify-center gap-4 border-b border-gray-200 pb-2" role="tablist" aria-label="Categorias de resumos">
           <button class="tab px-4 py-2 text-gray-700 hover:text-amber-700 transition" role="tab" aria-selected="true" aria-controls="panel-bible" id="tab-bible" data-target="bible">Bíblia</button>
           <button class="tab px-4 py-2 text-gray-700 hover:text-amber-700 transition" role="tab" aria-selected="false" aria-controls="panel-family" id="tab-family" data-target="family">Família</button>
           <button class="tab px-4 py-2 text-gray-700 hover:text-amber-700 transition" role="tab" aria-selected="false" aria-controls="panel-history" id="tab-history" data-target="history">História</button>
@@ -74,51 +74,27 @@
 
       <section class="mt-10">
         <div id="panel-bible" class="tab-panel" role="tabpanel" aria-labelledby="tab-bible" data-panel="bible">
-          <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Bíblia</h2>
-            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/bible</p>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="bible"></div>
+          <div class="flex justify-center" data-abstracts-container="bible"></div>
         </div>
 
         <div id="panel-family" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-family" data-panel="family">
-          <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Família</h2>
-            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/family</p>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="family"></div>
+          <div class="flex justify-center" data-abstracts-container="family"></div>
         </div>
 
         <div id="panel-history" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-history" data-panel="history">
-          <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">História</h2>
-            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/history</p>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="history"></div>
+          <div class="flex justify-center" data-abstracts-container="history"></div>
         </div>
 
         <div id="panel-ministry" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-ministry" data-panel="ministry">
-          <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Ministério</h2>
-            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/ministry</p>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="ministry"></div>
+          <div class="flex justify-center" data-abstracts-container="ministry"></div>
         </div>
 
         <div id="panel-theology" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-theology" data-panel="theology">
-          <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Teologia</h2>
-            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/theology</p>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="theology"></div>
+          <div class="flex justify-center" data-abstracts-container="theology"></div>
         </div>
 
         <div id="panel-christian-life" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-christian-life" data-panel="christian-life">
-          <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Vida Cristã</h2>
-            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/christian-life</p>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="christian-life"></div>
+          <div class="flex justify-center" data-abstracts-container="christian-life"></div>
         </div>
       </section>
     </div>
