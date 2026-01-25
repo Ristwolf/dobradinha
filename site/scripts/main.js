@@ -341,7 +341,7 @@ function createMasonry(container, initialItems, options = {}) {
         }
         if (colorShiftOnHover && gsap?.to) {
           const overlay = wrapper.querySelector('.masonry-color-overlay');
-          if (overlay) gsap.to(overlay, { opacity: 0.3, duration: 0.3 });
+          if (overlay) gsap.to(overlay, { opacity: 0.15, duration: 0.3 });
         }
       });
 
