@@ -237,7 +237,8 @@ function createMasonry(container, initialItems, options = {}) {
   } = options;
 
   const gsap = window.gsap;
-  const queries = ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)', '(min-width:400px)'];
+  // Keep mobile cards large: use 1 column below 600px.
+  const queries = ['(min-width:1500px)', '(min-width:1100px)', '(min-width:800px)', '(min-width:600px)'];
   const values = [5, 4, 3, 2];
   const media = queries.map((q) => matchMedia(q));
 
@@ -370,7 +371,10 @@ function createMasonry(container, initialItems, options = {}) {
     const out = items.map((child) => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = columnWidth * col;
-      const h = Math.max(160, Math.round((Number(child.height) || 400) / 2));
+      // Bigger tiles on mobile; scale down a bit as columns increase.
+      const base = Math.max(360, Math.round(Number(child.height) || 560));
+      const scale = columns >= 4 ? 0.6 : columns === 3 ? 0.72 : columns === 2 ? 0.85 : 1;
+      const h = Math.max(360, Math.round(base * scale));
       const y = colHeights[col];
       colHeights[col] += h;
 
