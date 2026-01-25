@@ -75,6 +75,15 @@ async function fetchJson(url) {
   return await res.json();
 }
 
+function getSiteRelativePrefix() {
+  // When hosted on GitHub Pages, the site root is /<repo>/.
+  // Our subpages live under known folders (e.g. /books/), so JSON lives at ../data/... there.
+  const pathname = window.location.pathname;
+  const subpages = ['/studies/', '/abstracts/', '/books/', '/videos/', '/about/'];
+  const isSubpage = subpages.some((seg) => pathname.includes(seg));
+  return isSubpage ? '../' : './';
+}
+
 function createPdfCard({ title, url }) {
   const article = document.createElement('article');
   article.className = 'bg-white rounded-lg overflow-hidden shadow-md card';
@@ -107,7 +116,8 @@ async function renderAbstracts() {
 
   let data;
   try {
-    data = await fetchJson('./data/abstracts.json');
+    const prefix = getSiteRelativePrefix();
+    data = await fetchJson(prefix + 'data/abstracts.json');
   } catch {
     return;
   }
@@ -187,7 +197,8 @@ async function renderVideos() {
 
   let data;
   try {
-    data = await fetchJson('./data/videos.json');
+    const prefix = getSiteRelativePrefix();
+    data = await fetchJson(prefix + 'data/videos.json');
   } catch {
     empty.hidden = false;
     return;
