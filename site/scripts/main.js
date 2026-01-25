@@ -155,7 +155,7 @@ function getSiteRelativePrefix() {
   // When hosted on GitHub Pages, the site root is /<repo>/.
   // Our subpages live under known folders (e.g. /books/), so JSON lives at ../data/... there.
   const pathname = window.location.pathname;
-  const subpages = ['/studies/', '/abstracts/', '/books/', '/videos/', '/about/'];
+  const subpages = ['/studies/', '/abstracts/', '/resumos/', '/books/', '/videos/', '/about/'];
   const isSubpage = subpages.some((seg) => pathname.includes(seg));
   return isSubpage ? '../' : './';
 }

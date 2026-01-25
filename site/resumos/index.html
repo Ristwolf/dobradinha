@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instituto Hack</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link rel="stylesheet" href="../styles/main.css">
+  <script src="../scripts/main.js" defer></script>
+</head>
+<body class="font-serif bg-gray-50">
+
+  <!-- Nav (global) -->
+  <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../" class="text-xl font-bold text-gray-800">Dobradinha Hack</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="../" class="text-gray-800 hover:text-amber-600 transition">Home</a>
+          <a href="../studies/" class="text-gray-800 hover:text-amber-600 transition">Estudos</a>
+          <a href="../resumos/" class="text-gray-800 hover:text-amber-600 transition">Resumos</a>
+          <a href="../books/" class="text-gray-800 hover:text-amber-600 transition">Livros</a>
+          <a href="../videos/" class="text-gray-800 hover:text-amber-600 transition">Vídeos</a>
+          <a href="../about/" class="text-gray-800 hover:text-amber-600 transition">Sobre</a>
+          <a href="../#contact" class="text-gray-800 hover:text-amber-600 transition">Contato</a>
+        </div>
+        <div class="md:hidden flex items-center">
+          <button class="mobile-menu-button" aria-label="Abrir menu" type="button"><i data-feather="menu"></i></button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero-bg min-h-[40vh] flex items-center justify-center text-white">
+    <div class="text-center px-4" data-aos="fade-up">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">Resumos</h1>
+      <p class="text-lg md:text-xl opacity-90">Seleção de resumos por categoria</p>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <main class="py-16 bg-white" id="tabs" data-page="abstracts">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="w-full overflow-x-auto" data-aos="fade-up">
+        <div class="inline-flex min-w-full md:min-w-0 gap-4 border-b border-gray-200 pb-2" role="tablist" aria-label="Categorias de resumos">
+          <button class="tab px-4 py-2 text-gray-700 hover:text-amber-700 transition" role="tab" aria-selected="true" aria-controls="panel-bible" id="tab-bible" data-target="bible">Bíblia</button>
+          <button class="tab px-4 py-2 text-gray-700 hover:text-amber-700 transition" role="tab" aria-selected="false" aria-controls="panel-family" id="tab-family" data-target="family">Família</button>
+          <button class="tab px-4 py-2 text-gray-700 hover:text-amber-700 transition" role="tab" aria-selected="false" aria-controls="panel-history" id="tab-history" data-target="history">História</button>
+          <button class="tab px-4 py-2 text-gray-700 hover:text-amber-700 transition" role="tab" aria-selected="false" aria-controls="panel-ministry" id="tab-ministry" data-target="ministry">Ministério</button>
+          <button class="tab px-4 py-2 text-gray-700 hover:text-amber-700 transition" role="tab" aria-selected="false" aria-controls="panel-theology" id="tab-theology" data-target="theology">Teologia</button>
+          <button class="tab px-4 py-2 text-gray-700 hover:text-amber-700 transition" role="tab" aria-selected="false" aria-controls="panel-christian-life" id="tab-christian-life" data-target="christian-life">Vida Cristã</button>
+        </div>
+      </div>
+
+      <section class="mt-10">
+        <div id="panel-bible" class="tab-panel" role="tabpanel" aria-labelledby="tab-bible" data-panel="bible">
+          <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Bíblia</h2>
+            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/bible</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="bible"></div>
+        </div>
+
+        <div id="panel-family" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-family" data-panel="family">
+          <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Família</h2>
+            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/family</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="family"></div>
+        </div>
+
+        <div id="panel-history" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-history" data-panel="history">
+          <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">História</h2>
+            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/history</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="history"></div>
+        </div>
+
+        <div id="panel-ministry" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-ministry" data-panel="ministry">
+          <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Ministério</h2>
+            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/ministry</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="ministry"></div>
+        </div>
+
+        <div id="panel-theology" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-theology" data-panel="theology">
+          <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Teologia</h2>
+            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/theology</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="theology"></div>
+        </div>
+
+        <div id="panel-christian-life" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-christian-life" data-panel="christian-life">
+          <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Vida Cristã</h2>
+            <p class="text-gray-600 mt-2">PDFs encontrados em abstracts/christian-life</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-abstracts-container="christian-life"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p>&copy; <span id="y"></span> Dobradinha Hack. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
