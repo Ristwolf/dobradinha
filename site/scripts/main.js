@@ -321,7 +321,16 @@ function createMasonry(container, initialItems, options = {}) {
 
       const img = document.createElement('div');
       img.className = 'masonry-item-img';
-      img.style.backgroundImage = `url(${item.img})`;
+      if (item.img) {
+        img.style.backgroundImage = `url(${item.img})`;
+      } else {
+        img.style.backgroundImage = '';
+      }
+
+      const title = document.createElement('div');
+      title.className = 'masonry-item-title';
+      title.textContent = String(item.title ?? '');
+      img.appendChild(title);
 
       if (colorShiftOnHover) {
         const overlay = document.createElement('div');
@@ -508,36 +517,18 @@ async function renderResumos() {
     return;
   }
 
-  const imagePool = [
-    'abacaxi.jpg',
-    'como_ler.jpg',
-    'como_estudar_tim.webp',
-    'discipulo_juan.jpeg',
-    'formacao_discipulo.jpg',
-    'hermeneutica_nelson.jpg',
-    'mente_crista.jpg',
-    'nunca_conheci.jpg',
-    'origens_reforma.jpg',
-    'pastoreando_crianca.jpg',
-    'pregando_cristo_sidney.jpg',
-    'screw_larry.jpg',
-    'silencio_adao.jpg',
-    'super_ocupado.jpg',
-    'taustin.jpg',
-    'j.jpeg'
-  ].map((f) => resolveSiteUrl(prefix, `img/${f}`));
-
   const itemsByKey = new Map();
   for (const category of data.categories ?? []) {
     const files = category.files ?? [];
     const items = files.map((file, index) => {
       const seed = hashStringToInt(`${category.key}:${file.name}`);
-      const img = imagePool[seed % imagePool.length];
+      const cover = file.coverUrl ? resolveSiteUrl(prefix, file.coverUrl) : '';
       const height = 250 + (seed % 650); // 250..899
       return {
         id: `${category.key}:${index}`,
-        img,
+        img: cover,
         url: resolveSiteUrl(prefix, file.url),
+        title: file.name,
         height
       };
     });
@@ -569,7 +560,7 @@ async function renderResumos() {
         scaleOnHover: true,
         hoverScale: 0.95,
         blurToFocus: false,
-        colorShiftOnHover: true
+        colorShiftOnHover: false
       });
       instancesByKey.set(key, instance);
     } else {

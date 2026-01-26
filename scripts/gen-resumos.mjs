@@ -1,4 +1,4 @@
-import { readdir, stat, writeFile } from 'node:fs/promises';
+import { access, readdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 function encodePathSegment(segment) {
@@ -37,6 +37,24 @@ function humanizeFilename(fileName) {
   return base;
 }
 
+async function findCoverForPdf(pdfAbsPath) {
+  const dir = path.dirname(pdfAbsPath);
+  const base = path.basename(pdfAbsPath).replace(/\.pdf$/i, '');
+  const exts = ['.jpg', '.jpeg', '.png', '.webp'];
+
+  for (const ext of exts) {
+    const candidate = path.join(dir, base + ext);
+    try {
+      await access(candidate);
+      return candidate;
+    } catch {
+      // ignore
+    }
+  }
+
+  return null;
+}
+
 export async function generateResumosJson({ siteDir }) {
   const resumosRoot = path.join(siteDir, 'resumos');
 
@@ -70,14 +88,23 @@ export async function generateResumosJson({ siteDir }) {
 
     pdfPaths.sort((a, b) => a.localeCompare(b, 'pt-BR'));
 
-    const files = pdfPaths.map((absPath) => {
+    const files = [];
+    for (const absPath of pdfPaths) {
       const relFromSite = path.relative(siteDir, absPath);
       const url = toUrlPath(relFromSite);
-      return {
+      const file = {
         name: humanizeFilename(path.basename(absPath)),
         url
       };
-    });
+
+      const coverAbs = await findCoverForPdf(absPath);
+      if (coverAbs) {
+        const relCover = path.relative(siteDir, coverAbs);
+        file.coverUrl = toUrlPath(relCover);
+      }
+
+      files.push(file);
+    }
 
     result.categories.push({
       key: category.key,

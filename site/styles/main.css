@@ -94,6 +94,7 @@
   position: relative;
   background-size: cover;
   background-position: center center;
+  background-color: #fff;
   width: 100%;
   height: 100%;
   border-radius: 10px;
@@ -102,17 +103,26 @@
   filter: none !important;
 }
 
-.masonry-color-overlay {
+.masonry-item-title {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, rgba(255, 0, 150, 0.35), rgba(0, 150, 255, 0.35));
-  opacity: 0;
-  pointer-events: none;
-  border-radius: 10px;
-  mix-blend-mode: soft-light;
+  right: 0;
+  padding: 10px 12px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.masonry-color-overlay {
+  display: none;
 }
 
 
