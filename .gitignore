@@ -5,4 +5,3 @@ node_modules/
 site/.nojekyll
 site/data/*.json
 site/img/
-site/abstracts/

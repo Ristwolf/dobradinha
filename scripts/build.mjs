@@ -19,14 +19,14 @@ async function copyDir(src, dest) {
   await cp(src, dest, { recursive: true });
 }
 
-async function copyAbstractsCategories({ abstractsSrc, abstractsDest }) {
+async function copyResumosCategories({ resumosSrc, resumosDest }) {
   const categoryDirs = ['bible', 'family', 'history', 'ministry', 'theology', 'christian-life'];
-  await ensureDir(abstractsDest);
+  await ensureDir(resumosDest);
 
-  // Copy per-category so we preserve the hand-authored page at site/abstracts/index.html.
+  // Copy per-category so we preserve the hand-authored page at site/resumos/index.html.
   for (const category of categoryDirs) {
-    const srcDir = path.join(abstractsSrc, category);
-    const destDir = path.join(abstractsDest, category);
+    const srcDir = path.join(resumosSrc, category);
+    const destDir = path.join(resumosDest, category);
     await rm(destDir, { recursive: true, force: true });
     await cp(srcDir, destDir, { recursive: true });
   }
@@ -42,16 +42,16 @@ async function main() {
   const imgDest = path.join(siteDir, 'img');
   await copyDir(imgSrc, imgDest);
 
-  const abstractsSrc = path.join(repoRoot, 'abstracts');
-  const abstractsDest = path.join(siteDir, 'abstracts');
-  await copyAbstractsCategories({ abstractsSrc, abstractsDest });
+  const resumosSrc = path.join(repoRoot, 'resumos');
+  const resumosDest = path.join(siteDir, 'resumos');
+  await copyResumosCategories({ resumosSrc, resumosDest });
 
   // Prevent Jekyll processing on GitHub Pages.
   await writeFile(path.join(siteDir, '.nojekyll'), '', 'utf8');
 
   // Generate JSON data used by the pages.
-  const { generateAbstractsJson } = await import('./gen-abstracts.mjs');
-  await generateAbstractsJson({ siteDir });
+  const { generateResumosJson } = await import('./gen-resumos.mjs');
+  await generateResumosJson({ siteDir });
 
   const { generateVideosJson } = await import('./gen-videos.mjs');
   await generateVideosJson({ siteDir, channelId: process.env.YOUTUBE_CHANNEL_ID ?? '' });

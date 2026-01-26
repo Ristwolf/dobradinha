@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "gen:abstracts": "node scripts/gen-abstracts.mjs",
+    "gen:resumos": "node scripts/gen-resumos.mjs",
     "gen:videos": "node scripts/gen-videos.mjs"
   }
 }

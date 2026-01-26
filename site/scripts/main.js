@@ -34,8 +34,8 @@ function initTabs() {
   const panels = document.querySelectorAll('.tab-panel');
   if (tabs.length === 0 || panels.length === 0) return;
 
-  const isAbstractsPage = Boolean(document.querySelector('[data-page="abstracts"]'));
-  const hashAliases = isAbstractsPage
+  const isResumosPage = Boolean(document.querySelector('[data-page="resumos"]'));
+  const hashAliases = isResumosPage
     ? {
         historia: 'history',
         ministerio: 'ministry',
@@ -58,7 +58,7 @@ function initTabs() {
   }
 
   function animatePanel(panel) {
-    if (!isAbstractsPage) return;
+    if (!isResumosPage) return;
     const gsap = window.gsap;
     if (!gsap?.fromTo) return;
 
@@ -98,9 +98,9 @@ function initTabs() {
       }
     });
 
-    if (isAbstractsPage) {
+    if (isResumosPage) {
       try {
-        window.__abstractsMasonry?.activate?.(key);
+        window.__resumosMasonry?.activate?.(key);
       } catch {
         // ignore
       }
@@ -110,17 +110,17 @@ function initTabs() {
   }
 
   tabs.forEach((tab) => {
-    tab.addEventListener('click', () => activateTab(tab.dataset.target, { setHash: isAbstractsPage }));
+    tab.addEventListener('click', () => activateTab(tab.dataset.target, { setHash: isResumosPage }));
     tab.addEventListener('keydown', (e) => {
       const idx = Array.from(tabs).indexOf(tab);
       if (e.key === 'ArrowRight') {
         const next = tabs[(idx + 1) % tabs.length];
         next.focus();
-        activateTab(next.dataset.target, { setHash: isAbstractsPage });
+        activateTab(next.dataset.target, { setHash: isResumosPage });
       } else if (e.key === 'ArrowLeft') {
         const prev = tabs[(idx - 1 + tabs.length) % tabs.length];
         prev.focus();
-        activateTab(prev.dataset.target, { setHash: isAbstractsPage });
+        activateTab(prev.dataset.target, { setHash: isResumosPage });
       }
     });
   });
@@ -145,8 +145,8 @@ function initTabs() {
   }
 
   window.addEventListener('hashchange', activateFromHash);
-  if (isAbstractsPage) {
-    // For non-abstracts pages, we don't want to hijack hash navigation.
+  if (isResumosPage) {
+    // For non-resumos pages, we don't want to hijack hash navigation.
     activateFromHash();
   } else {
     activateTab(tabs[0].dataset.target);
@@ -170,7 +170,7 @@ function getSiteRelativePrefix() {
   // When hosted on GitHub Pages, the site root is /<repo>/.
   // Our subpages live under known folders (e.g. /books/), so JSON lives at ../data/... there.
   const pathname = window.location.pathname;
-  const subpages = ['/studies/', '/abstracts/', '/resumos/', '/books/', '/videos/', '/about/'];
+  const subpages = ['/studies/', '/resumos/', '/books/', '/videos/', '/about/'];
   const isSubpage = subpages.some((seg) => pathname.includes(seg));
   return isSubpage ? '../' : './';
 }
@@ -495,15 +495,15 @@ function createMasonry(container, initialItems, options = {}) {
   return { setItems, relayout, destroy };
 }
 
-async function renderAbstracts() {
-  const page = document.querySelector('[data-page="abstracts"]');
+async function renderResumos() {
+  const page = document.querySelector('[data-page="resumos"]');
   if (!page) return;
 
   const prefix = getSiteRelativePrefix();
 
   let data;
   try {
-    data = await fetchJson(prefix + 'data/abstracts.json');
+    data = await fetchJson(prefix + 'data/resumos.json');
   } catch {
     return;
   }
@@ -548,7 +548,7 @@ async function renderAbstracts() {
 
   function ensureMounted(key) {
     const entry = itemsByKey.get(key);
-    const container = document.querySelector(`[data-abstracts-container="${CSS.escape(key)}"]`);
+    const container = document.querySelector(`[data-resumos-container="${CSS.escape(key)}"]`);
     if (!container) return;
 
     if (!entry || entry.items.length === 0) {
@@ -577,7 +577,7 @@ async function renderAbstracts() {
     }
   }
 
-  window.__abstractsMasonry = {
+  window.__resumosMasonry = {
     activate: (key) => ensureMounted(key)
   };
 
@@ -671,6 +671,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   initMobileMenuPlaceholder();
   initTabs();
 
-  await renderAbstracts();
+  await renderResumos();
   await renderVideos();
 });

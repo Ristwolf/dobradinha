@@ -15,8 +15,8 @@ On Ubuntu/Debian you can install Node.js and npm with:
 
 The build:
 - copies `img/` -> `site/img/`
-- copies `abstracts/` -> `site/abstracts/`
-- generates `site/data/abstracts.json`
+- copies `resumos/` -> `site/resumos/`
+- generates `site/data/resumos.json`
 - generates `site/data/videos.json`
 
 ## YouTube channel id (later)

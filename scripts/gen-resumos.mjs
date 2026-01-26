@@ -37,8 +37,8 @@ function humanizeFilename(fileName) {
   return base;
 }
 
-export async function generateAbstractsJson({ siteDir }) {
-  const abstractsRoot = path.join(siteDir, 'abstracts');
+export async function generateResumosJson({ siteDir }) {
+  const resumosRoot = path.join(siteDir, 'resumos');
 
   const categoryDefs = [
     { key: 'bible', title: 'Bíblia' },
@@ -55,7 +55,7 @@ export async function generateAbstractsJson({ siteDir }) {
   };
 
   for (const category of categoryDefs) {
-    const categoryDir = path.join(abstractsRoot, category.key);
+    const categoryDir = path.join(resumosRoot, category.key);
 
     let pdfPaths = [];
     try {
@@ -87,6 +87,11 @@ export async function generateAbstractsJson({ siteDir }) {
     });
   }
 
-  const outPath = path.join(siteDir, 'data', 'abstracts.json');
+  const outPath = path.join(siteDir, 'data', 'resumos.json');
   await writeFile(outPath, JSON.stringify(result, null, 2) + '\n', 'utf8');
+}
+
+// Backwards-compatible alias (older code called this "abstracts").
+export async function generateAbstractsJson({ siteDir }) {
+  return generateResumosJson({ siteDir });
 }
