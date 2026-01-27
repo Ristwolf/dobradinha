@@ -336,10 +336,6 @@ function createMasonry(container, initialItems, options = {}) {
       hoverLabel.textContent = String(item.title ?? '');
       img.appendChild(hoverLabel);
 
-      const title = document.createElement('div');
-      title.className = 'masonry-item-title';
-      title.textContent = String(item.title ?? '');
-
       if (colorShiftOnHover) {
         const overlay = document.createElement('div');
         overlay.className = 'masonry-color-overlay';
@@ -347,7 +343,6 @@ function createMasonry(container, initialItems, options = {}) {
       }
 
       card.appendChild(img);
-      card.appendChild(title);
       wrapper.appendChild(card);
 
       wrapper.addEventListener('click', () => {
