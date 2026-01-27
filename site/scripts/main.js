@@ -239,7 +239,8 @@ function createMasonry(container, initialItems, options = {}) {
   const gsap = window.gsap;
   // Keep mobile cards large: use 1 column below 600px.
   const queries = ['(min-width:1500px)', '(min-width:1100px)', '(min-width:800px)', '(min-width:600px)'];
-  const values = [5, 4, 3, 2];
+  // Slightly fewer columns => each tile is wider.
+  const values = [4, 3, 2, 2];
   const media = queries.map((q) => matchMedia(q));
 
   function getColumns() {
@@ -378,7 +379,8 @@ function createMasonry(container, initialItems, options = {}) {
   }
 
   function computeGrid(width) {
-    const columns = getColumns();
+    const desiredColumns = getColumns();
+    const columns = Math.max(1, Math.min(desiredColumns, items.length || 1));
     const colHeights = new Array(columns).fill(0);
     const columnWidth = width / columns;
 
