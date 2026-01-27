@@ -125,7 +125,7 @@
   border-radius: 8px;
   background: rgba(146, 64, 14, 0.95);
   color: #fff;
-  font-size: 13px;
+  font-size: calc(13px * 1.25);
   font-weight: 700;
   line-height: 1.2;
   opacity: 0;
