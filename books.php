@@ -78,7 +78,7 @@
            target="_blank" rel="noopener noreferrer"
            class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
            data-aos="fade-up" data-aos-delay="100">
-          <img src="http://static.photos/black/640x360/1" alt="Para que você serve? (Refletir)" class="w-full h-64 object-cover">
+          <img src="http://static.photos/black/640x360/1" alt="Para que você serve? (Refletir)" class="w-full h-[32rem] object-contain">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xl font-bold text-gray-800">Para que você serve? (Refletir)</h3>
@@ -100,7 +100,7 @@
            target="_blank" rel="noopener noreferrer"
            class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
            data-aos="fade-up" data-aos-delay="200">
-          <img src="http://static.photos/black/640x360/2" alt="Vida longa e próspera: Sermões em Dt 1–4" class="w-full h-64 object-cover">
+          <img src="http://static.photos/black/640x360/2" alt="Vida longa e próspera: Sermões em Dt 1–4" class="w-full h-[32rem] object-contain">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xl font-bold text-gray-800">Vida longa e próspera: Sermões em Dt 1–4</h3>
@@ -136,7 +136,7 @@
            target="_blank" rel="noopener noreferrer"
            class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
            data-aos="fade-up" data-aos-delay="100">
-          <img src="http://static.photos/black/640x360/4" alt="Título Exemplo (tradução 1)" class="w-full h-64 object-cover">
+          <img src="http://static.photos/black/640x360/4" alt="Título Exemplo (tradução 1)" class="w-full h-[32rem] object-contain">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xl font-bold text-gray-800">Título Exemplo (tradução 1)</h3>
@@ -158,7 +158,7 @@
            target="_blank" rel="noopener noreferrer"
            class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
            data-aos="fade-up" data-aos-delay="200">
-          <img src="http://static.photos/black/640x360/5" alt="Título Exemplo (tradução 2)" class="w-full h-64 object-cover">
+          <img src="http://static.photos/black/640x360/5" alt="Título Exemplo (tradução 2)" class="w-full h-[32rem] object-contain">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xl font-bold text-gray-800">Título Exemplo (tradução 2)</h3>
@@ -194,7 +194,7 @@
            target="_blank" rel="noopener noreferrer"
            class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
            data-aos="fade-up" data-aos-delay="100">
-          <img src="http://static.photos/black/640x360/3" alt="Presbiterianismo catarinense" class="w-full h-64 object-cover">
+          <img src="http://static.photos/black/640x360/3" alt="Presbiterianismo catarinense" class="w-full h-[32rem] object-contain">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xl font-bold text-gray-800">Presbiterianismo catarinense</h3>
@@ -216,7 +216,7 @@
            target="_blank" rel="noopener noreferrer"
            class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
            data-aos="fade-up" data-aos-delay="200">
-          <img src="http://static.photos/black/640x360/6" alt="Outro título de Osvaldo" class="w-full h-64 object-cover">
+          <img src="http://static.photos/black/640x360/6" alt="Outro título de Osvaldo" class="w-full h-[32rem] object-contain">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xl font-bold text-gray-800">Outro título de Osvaldo</h3>
