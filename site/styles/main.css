@@ -2,7 +2,7 @@
 
 /* Override Tailwind's bg-gray-50 to use the requested light gray */
 .bg-gray-50 {
-  background-color: rgb(203, 202, 202);
+  background-color: rgb(219, 222, 225);
 }
 
 .hero-bg {
