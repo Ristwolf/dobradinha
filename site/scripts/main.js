@@ -319,6 +319,9 @@ function createMasonry(container, initialItems, options = {}) {
       wrapper.className = 'masonry-item-wrapper';
       wrapper.dataset.key = String(item.id);
 
+      const card = document.createElement('div');
+      card.className = 'masonry-item-card';
+
       const img = document.createElement('div');
       img.className = 'masonry-item-img';
       if (item.img) {
@@ -330,7 +333,6 @@ function createMasonry(container, initialItems, options = {}) {
       const title = document.createElement('div');
       title.className = 'masonry-item-title';
       title.textContent = String(item.title ?? '');
-      img.appendChild(title);
 
       if (colorShiftOnHover) {
         const overlay = document.createElement('div');
@@ -338,7 +340,9 @@ function createMasonry(container, initialItems, options = {}) {
         img.appendChild(overlay);
       }
 
-      wrapper.appendChild(img);
+      card.appendChild(img);
+      card.appendChild(title);
+      wrapper.appendChild(card);
 
       wrapper.addEventListener('click', () => {
         if (!item.url) return;
@@ -524,11 +528,15 @@ async function renderResumos() {
       const seed = hashStringToInt(`${category.key}:${file.name}`);
       const cover = file.coverUrl ? resolveSiteUrl(prefix, file.coverUrl) : '';
       const height = 250 + (seed % 650); // 250..899
+
+      const rawTitle = String(file.name ?? '');
+      const displayTitle = rawTitle.replace(/^resumo[.\s_-]+/i, '');
+
       return {
         id: `${category.key}:${index}`,
         img: cover,
         url: resolveSiteUrl(prefix, file.url),
-        title: file.name,
+        title: displayTitle,
         height
       };
     });
