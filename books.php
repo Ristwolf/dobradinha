@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Instituto Hack</title>
+  <title>institutohack</title>
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -32,7 +32,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
-          <a href="/" class="text-xl font-bold text-gray-800">Dobradinha Hack</a>
+          <a href="/" class="text-xl font-bold text-gray-800">institutohack</a>
         </div>
         <div class="hidden md:flex items-center space-x-8">
           <a href="/" class="text-gray-800 hover:text-amber-600 transition">Home</a>
@@ -240,7 +240,7 @@
   <!-- Footer -->
   <footer class="bg-gray-900 text-gray-400 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <p>&copy; <span id="y"></span> Dobradinha Hack. Todos os direitos reservados.</p>
+      <p>&copy; <span id="y"></span> institutohack. Todos os direitos reservados.</p>
     </div>
   </footer>
 

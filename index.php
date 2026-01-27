@@ -41,7 +41,7 @@ function formatDatePtBr($dateIso)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instituto Hack</title>
+    <title>institutohack</title>
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -80,7 +80,7 @@ function formatDatePtBr($dateIso)
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <span class="text-xl font-bold text-gray-800">Dobradinha Hack</span>
+                    <span class="text-xl font-bold text-gray-800">institutohack</span>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#" class="text-gray-800 hover:text-amber-600 transition">Home</a>
@@ -103,7 +103,7 @@ function formatDatePtBr($dateIso)
     <!-- Hero Section -->
     <section class="hero-bg min-h-screen flex items-center justify-center text-white">
         <div class="text-center px-4" data-aos="fade-up">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6">Dobradinha Hack</h1>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">institutohack</h1>
             <div class="typewriter text-xl md:text-2xl mb-8 mx-auto max-w-2xl">
                 Bem-aventurados os que ouvem a palavra de Deus e a guardam.
             </div>

@@ -332,6 +332,11 @@ function createMasonry(container, initialItems, options = {}) {
         img.style.backgroundImage = '';
       }
 
+      const hoverLabel = document.createElement('div');
+      hoverLabel.className = 'masonry-hover-label';
+      hoverLabel.textContent = String(item.title ?? '');
+      img.appendChild(hoverLabel);
+
       const title = document.createElement('div');
       title.className = 'masonry-item-title';
       title.textContent = String(item.title ?? '');

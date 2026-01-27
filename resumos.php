@@ -1,7 +1,7 @@
 <?php
 // summaries.php — Página de resumos com 5 categorias em abas
 
-$siteTitle = 'Dobradinha Hack';
+$siteTitle = 'institutohack';
 $pageTitle = 'Resumos de Livros';
 
 function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
@@ -45,7 +45,7 @@ function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
-          <a href="/" class="text-xl font-bold text-gray-800">Dobradinha Hack</a>
+          <a href="/" class="text-xl font-bold text-gray-800">institutohack</a>
         </div>
         <div class="hidden md:flex items-center space-x-8">
           <a href="/curso-php/site/index.php" class="text-gray-800 hover:text-amber-600 transition">Home</a>
