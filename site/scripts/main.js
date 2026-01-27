@@ -318,6 +318,7 @@ function createMasonry(container, initialItems, options = {}) {
       const wrapper = document.createElement('div');
       wrapper.className = 'masonry-item-wrapper';
       wrapper.dataset.key = String(item.id);
+      wrapper.style.opacity = '0';
 
       const card = document.createElement('div');
       card.className = 'masonry-item-card';

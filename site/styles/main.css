@@ -89,6 +89,7 @@
   top: 0;
   left: 0;
   box-sizing: border-box;
+  opacity: 0;
 }
 
 .masonry-item-card {
@@ -117,7 +118,7 @@
 
 .masonry-item-title {
   padding: 12px 14px;
-  background: rgba(0, 0, 0, 0.55);
+  background: #92400e;
   color: #fff;
   font-size: 14px;
   font-weight: 600;
