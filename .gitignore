@@ -4,4 +4,6 @@ node_modules/
 # Generated publish artifacts
 site/.nojekyll
 site/data/*.json
+!site/data/resumos.json
+!site/data/videos.json
 site/img/

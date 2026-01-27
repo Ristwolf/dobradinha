@@ -1,0 +1,157 @@
+{
+  "generatedAt": "2026-01-27T00:02:09.880576Z",
+  "categories": [
+    {
+      "key": "bible",
+      "title": "Bíblia",
+      "count": 6,
+      "files": [
+        {
+          "name": "Resumo.Berkhof_Princípios de interpretação bíblica",
+          "url": "resumos/bible/Resumo.Berkhof_Princ%C3%ADpios%20de%20interpreta%C3%A7%C3%A3o%20b%C3%ADblica/Resumo.Berkhof_Princ%C3%ADpios%20de%20interpreta%C3%A7%C3%A3o%20b%C3%ADblica.pdf",
+          "coverUrl": "resumos/bible/Resumo.Berkhof_Princ%C3%ADpios%20de%20interpreta%C3%A7%C3%A3o%20b%C3%ADblica/Resumo.Berkhof_Princ%C3%ADpios%20de%20interpreta%C3%A7%C3%A3o%20b%C3%ADblica.jpg"
+        },
+        {
+          "name": "Resumo.Getz_A medida de um homem espiritual",
+          "url": "resumos/bible/Resumo.Getz_A%20medida%20de%20um%20homem%20espiritual/Resumo.Getz_A%20medida%20de%20um%20homem%20espiritual.pdf",
+          "coverUrl": "resumos/bible/Resumo.Getz_A%20medida%20de%20um%20homem%20espiritual/Resumo.Getz_A%20medida%20de%20um%20homem%20espiritual.jpg"
+        },
+        {
+          "name": "Resumo.Greidanus_Pregando Cristo a partir do AT",
+          "url": "resumos/bible/Resumo.Greidanus_Pregando%20Cristo%20a%20partir%20do%20AT/Resumo.Greidanus_Pregando%20Cristo%20a%20partir%20do%20AT.pdf",
+          "coverUrl": "resumos/bible/Resumo.Greidanus_Pregando%20Cristo%20a%20partir%20do%20AT/Resumo.Greidanus_Pregando%20Cristo%20a%20partir%20do%20AT.jpg"
+        },
+        {
+          "name": "Resumo.Henrichsen_Métodos de estudo bíblico",
+          "url": "resumos/bible/Resumo.Henrichsen_M%C3%A9todos%20de%20estudo%20b%C3%ADblico/Resumo.Henrichsen_M%C3%A9todos%20de%20estudo%20b%C3%ADblico.pdf",
+          "coverUrl": "resumos/bible/Resumo.Henrichsen_M%C3%A9todos%20de%20estudo%20b%C3%ADblico/Resumo.Henrichsen_M%C3%A9todos%20de%20estudo%20b%C3%ADblico.jpg"
+        },
+        {
+          "name": "Resumo.Henrichsen_Princípios de interpretação bíblica",
+          "url": "resumos/bible/Resumo.Henrichsen_Princ%C3%ADpios%20de%20interpreta%C3%A7%C3%A3o%20b%C3%ADblica/Resumo.Henrichsen_Princ%C3%ADpios%20de%20interpreta%C3%A7%C3%A3o%20b%C3%ADblica.pdf",
+          "coverUrl": "resumos/bible/Resumo.Henrichsen_Princ%C3%ADpios%20de%20interpreta%C3%A7%C3%A3o%20b%C3%ADblica/Resumo.Henrichsen_Princ%C3%ADpios%20de%20interpreta%C3%A7%C3%A3o%20b%C3%ADblica.jpg"
+        },
+        {
+          "name": "Resumo.LaHaye_Como estudar a Bíblia sozinho",
+          "url": "resumos/bible/Resumo.LaHaye_Como%20estudar%20a%20B%C3%ADblia%20sozinho/Resumo.LaHaye_Como%20estudar%20a%20B%C3%ADblia%20sozinho.pdf",
+          "coverUrl": "resumos/bible/Resumo.LaHaye_Como%20estudar%20a%20B%C3%ADblia%20sozinho/Resumo.LaHaye_Como%20estudar%20a%20B%C3%ADblia%20sozinho.webp"
+        }
+      ]
+    },
+    {
+      "key": "family",
+      "title": "Família",
+      "count": 4,
+      "files": [
+        {
+          "name": "Resumo.Crabb_O silêncio de Adão",
+          "url": "resumos/family/Resumo.Crabb_O%20sil%C3%AAncio%20de%20Ad%C3%A3o/Resumo.Crabb_O%20sil%C3%AAncio%20de%20Ad%C3%A3o.pdf",
+          "coverUrl": "resumos/family/Resumo.Crabb_O%20sil%C3%AAncio%20de%20Ad%C3%A3o/Resumo.Crabb_O%20sil%C3%AAncio%20de%20Ad%C3%A3o.jpg"
+        },
+        {
+          "name": "Resumo.Gray_Homens são de Marte, mulheres são de Vênus",
+          "url": "resumos/family/Resumo.Gray_Homens%20s%C3%A3o%20de%20Marte%2C%20mulheres%20s%C3%A3o%20de%20V%C3%AAnus/Resumo.Gray_Homens%20s%C3%A3o%20de%20Marte%2C%20mulheres%20s%C3%A3o%20de%20V%C3%AAnus.pdf",
+          "coverUrl": "resumos/family/Resumo.Gray_Homens%20s%C3%A3o%20de%20Marte%2C%20mulheres%20s%C3%A3o%20de%20V%C3%AAnus/Resumo.Gray_Homens%20s%C3%A3o%20de%20Marte%2C%20mulheres%20s%C3%A3o%20de%20V%C3%AAnus.jpg"
+        },
+        {
+          "name": "Resumo.Tripp_Pastoreando o coração da criança",
+          "url": "resumos/family/Resumo.Tripp_Pastoreando%20o%20cora%C3%A7%C3%A3o%20da%20crian%C3%A7a/Resumo.Tripp_Pastoreando%20o%20cora%C3%A7%C3%A3o%20da%20crian%C3%A7a.pdf",
+          "coverUrl": "resumos/family/Resumo.Tripp_Pastoreando%20o%20cora%C3%A7%C3%A3o%20da%20crian%C3%A7a/Resumo.Tripp_Pastoreando%20o%20cora%C3%A7%C3%A3o%20da%20crian%C3%A7a.jpg"
+        },
+        {
+          "name": "Resumo.Wakefield_Homens são de Israel",
+          "url": "resumos/family/Resumo.Wakefield_Homens%20s%C3%A3o%20de%20Israel/Resumo.Wakefield_Homens%20s%C3%A3o%20de%20Israel.pdf",
+          "coverUrl": "resumos/family/Resumo.Wakefield_Homens%20s%C3%A3o%20de%20Israel/Resumo.Wakefield_Homens%20s%C3%A3o%20de%20Israel.jpg"
+        }
+      ]
+    },
+    {
+      "key": "history",
+      "title": "História",
+      "count": 1,
+      "files": [
+        {
+          "name": "Resumo.McGrath_Origens intelectuais da Reforma",
+          "url": "resumos/history/Resumo.McGrath_Origens%20intelectuais%20da%20Reforma/Resumo.McGrath_Origens%20intelectuais%20da%20Reforma.pdf",
+          "coverUrl": "resumos/history/Resumo.McGrath_Origens%20intelectuais%20da%20Reforma/Resumo.McGrath_Origens%20intelectuais%20da%20Reforma.jpg"
+        }
+      ]
+    },
+    {
+      "key": "ministry",
+      "title": "Ministério",
+      "count": 2,
+      "files": [
+        {
+          "name": "Resumo.Adler_Como ler um livro",
+          "url": "resumos/ministry/Resumo.Adler_Como%20ler%20um%20livro/Resumo.Adler_Como%20ler%20um%20livro.pdf",
+          "coverUrl": "resumos/ministry/Resumo.Adler_Como%20ler%20um%20livro/Resumo.Adler_Como%20ler%20um%20livro.jpg"
+        },
+        {
+          "name": "Resumo.Crabb_Princípios de aconselhamento bíblico",
+          "url": "resumos/ministry/Resumo.Crabb_Princ%C3%ADpios%20de%20aconselhamento%20b%C3%ADblico/Resumo.Crabb_Princ%C3%ADpios%20de%20aconselhamento%20b%C3%ADblico.pdf",
+          "coverUrl": "resumos/ministry/Resumo.Crabb_Princ%C3%ADpios%20de%20aconselhamento%20b%C3%ADblico/Resumo.Crabb_Princ%C3%ADpios%20de%20aconselhamento%20b%C3%ADblico.jpeg"
+        }
+      ]
+    },
+    {
+      "key": "theology",
+      "title": "Teologia",
+      "count": 3,
+      "files": [
+        {
+          "name": "Resumo.Berger_Rumor de anjos",
+          "url": "resumos/theology/Resumo.Berger_Rumor%20de%20anjos/Resumo.Berger_Rumor%20de%20anjos.pdf",
+          "coverUrl": "resumos/theology/Resumo.Berger_Rumor%20de%20anjos/Resumo.Berger_Rumor%20de%20anjos.jpeg"
+        },
+        {
+          "name": "Resumo.Blamires_A mente cristã",
+          "url": "resumos/theology/Resumo.Blamires_A%20mente%20crist%C3%A3/Resumo.Blamires_A%20mente%20crist%C3%A3.pdf",
+          "coverUrl": "resumos/theology/Resumo.Blamires_A%20mente%20crist%C3%A3/Resumo.Blamires_A%20mente%20crist%C3%A3.jpg"
+        },
+        {
+          "name": "Resumo.Yancey_O Jesus que eu nunca conheci",
+          "url": "resumos/theology/Resumo.Yancey_O%20Jesus%20que%20eu%20nunca%20conheci/Resumo.Yancey_O%20Jesus%20que%20eu%20nunca%20conheci.pdf",
+          "coverUrl": "resumos/theology/Resumo.Yancey_O%20Jesus%20que%20eu%20nunca%20conheci/Resumo.Yancey_O%20Jesus%20que%20eu%20nunca%20conheci.jpg"
+        }
+      ]
+    },
+    {
+      "key": "christian-life",
+      "title": "Vida Cristã",
+      "count": 6,
+      "files": [
+        {
+          "name": "Extrato.Kemp_O campo dos abacaxis",
+          "url": "resumos/christian-life/Extrato.Kemp_O%20campo%20dos%20abacaxis/Extrato.Kemp_O%20campo%20dos%20abacaxis.pdf",
+          "coverUrl": "resumos/christian-life/Extrato.Kemp_O%20campo%20dos%20abacaxis/Extrato.Kemp_O%20campo%20dos%20abacaxis.jpg"
+        },
+        {
+          "name": "Resumo.Austin-Sparks_Diversos",
+          "url": "resumos/christian-life/Resumo.Austin-Sparks_Diversos/Resumo.Austin-Sparks_Diversos.pdf",
+          "coverUrl": "resumos/christian-life/Resumo.Austin-Sparks_Diversos/Resumo.Austin-Sparks_Diversos.jpg"
+        },
+        {
+          "name": "Resumo.DeYoung_Super ocupado",
+          "url": "resumos/christian-life/Resumo.DeYoung_Super%20ocupado/Resumo.DeYoung_Super%20ocupado.pdf",
+          "coverUrl": "resumos/christian-life/Resumo.DeYoung_Super%20ocupado/Resumo.DeYoung_Super%20ocupado.jpg"
+        },
+        {
+          "name": "Resumo.Ortiz_O discípulo",
+          "url": "resumos/christian-life/Resumo.Ortiz_O%20disc%C3%ADpulo/Resumo.Ortiz_O%20disc%C3%ADpulo.pdf",
+          "coverUrl": "resumos/christian-life/Resumo.Ortiz_O%20disc%C3%ADpulo/Resumo.Ortiz_O%20disc%C3%ADpulo.jpeg"
+        },
+        {
+          "name": "Resumo.Phillips_A formação de um discípulo",
+          "url": "resumos/christian-life/Resumo.Phillips_A%20forma%C3%A7%C3%A3o%20de%20um%20disc%C3%ADpulo/Resumo.Phillips_A%20forma%C3%A7%C3%A3o%20de%20um%20disc%C3%ADpulo.pdf",
+          "coverUrl": "resumos/christian-life/Resumo.Phillips_A%20forma%C3%A7%C3%A3o%20de%20um%20disc%C3%ADpulo/Resumo.Phillips_A%20forma%C3%A7%C3%A3o%20de%20um%20disc%C3%ADpulo.jpg"
+        },
+        {
+          "name": "Resumo.Richards_Estudos na ética do inferno",
+          "url": "resumos/christian-life/Resumo.Richards_Estudos%20na%20%C3%A9tica%20do%20inferno/Resumo.Richards_Estudos%20na%20%C3%A9tica%20do%20inferno.pdf",
+          "coverUrl": "resumos/christian-life/Resumo.Richards_Estudos%20na%20%C3%A9tica%20do%20inferno/Resumo.Richards_Estudos%20na%20%C3%A9tica%20do%20inferno.jpg"
+        }
+      ]
+    }
+  ]
+}
