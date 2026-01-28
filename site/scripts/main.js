@@ -609,6 +609,25 @@ async function renderStudies() {
   const openNewTab = document.getElementById('pdfflixOpenNewTab');
   const downloadLink = document.getElementById('pdfflixDownload');
 
+  async function ensurePdfJsLoaded(timeoutMs = 4000) {
+    if (window.pdfjsLib?.getDocument) return true;
+
+    return await new Promise((resolve) => {
+      let waited = 0;
+      const interval = 100;
+      const timer = setInterval(() => {
+        waited += interval;
+        if (window.pdfjsLib?.getDocument) {
+          clearInterval(timer);
+          resolve(true);
+        } else if (waited >= timeoutMs) {
+          clearInterval(timer);
+          resolve(false);
+        }
+      }, interval);
+    });
+  }
+
   function openModal(item) {
     if (!modal || !modalTitle || !modalFrame || !openNewTab || !downloadLink) return;
     modalTitle.textContent = item.title || 'PDF';
@@ -668,7 +687,7 @@ async function renderStudies() {
     if (name) name.textContent = title;
 
     const thumb = card.querySelector('.pdfCard__thumb');
-    if (thumb && window.pdfjsLib?.getDocument) {
+    if (thumb) {
       renderPdfThumb(url, thumb).catch(() => {
         // keep fallback
       });
@@ -687,7 +706,8 @@ async function renderStudies() {
   }
 
   async function renderPdfThumb(pdfUrl, thumbHost) {
-    if (!window.pdfjsLib) return;
+    const loaded = await ensurePdfJsLoaded();
+    if (!loaded || !window.pdfjsLib) return;
     if (!window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
       window.pdfjsLib.GlobalWorkerOptions.workerSrc =
         'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.js';

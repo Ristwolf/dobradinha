@@ -143,11 +143,11 @@
   transform: translateY(0);
 }
 
-/* ====== Netflix-like PDF Shelf (PDFFlix) ====== */
+/* ====== Netflix-like PDF Shelf (PDFFlix) ====== */ 
 .pdfflix {
   padding: 24px;
   color: #fff;
-  background: #c7c7ce;
+  background: #827f7d;
   border-radius: 18px;
   overflow: hidden;
 }
