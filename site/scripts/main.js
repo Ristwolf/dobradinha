@@ -35,7 +35,6 @@ function initTabs() {
   if (tabs.length === 0 || panels.length === 0) return;
 
   const isResumosPage = Boolean(document.querySelector('[data-page="resumos"]'));
-  const isStudiesPage = Boolean(document.querySelector('[data-page="studies"]'));
   const hashAliases = isResumosPage
     ? {
         historia: 'history',
@@ -102,14 +101,6 @@ function initTabs() {
     if (isResumosPage) {
       try {
         window.__resumosMasonry?.activate?.(key);
-      } catch {
-        // ignore
-      }
-    }
-
-    if (isStudiesPage) {
-      try {
-        window.__studiesMasonry?.activate?.(key);
       } catch {
         // ignore
       }
@@ -611,68 +602,51 @@ async function renderStudies() {
     return;
   }
 
-  const itemsByKey = new Map();
-  for (const category of data.categories ?? []) {
-    const files = category.files ?? [];
-    const items = files.map((file, index) => {
-      const seed = hashStringToInt(`${category.key}:${file.name}`);
-      const height = 260 + (seed % 520); // 260..779
+  function createStudiesCard({ title, url }) {
+    const card = document.createElement('a');
+    card.className = 'netflix-card';
+    card.href = url;
+    card.target = '_blank';
+    card.rel = 'noopener';
 
-      const rawTitle = String(file.name ?? '');
+    const poster = document.createElement('div');
+    poster.className = 'netflix-poster';
 
-      return {
-        id: `${category.key}:${index}`,
-        img: '',
-        url: resolveSiteUrl(prefix, file.url),
-        title: rawTitle,
-        height
-      };
-    });
-    itemsByKey.set(category.key, { title: category.title ?? category.key, items });
+    const label = document.createElement('div');
+    label.className = 'netflix-title';
+    label.textContent = title;
+
+    card.appendChild(poster);
+    card.appendChild(label);
+    return card;
   }
 
-  const instancesByKey = new Map();
-
-  function ensureMounted(key) {
-    const entry = itemsByKey.get(key);
+  for (const category of data.categories ?? []) {
+    const key = category.key;
     const container = document.querySelector(`[data-studies-container="${CSS.escape(key)}"]`);
-    if (!container) return;
+    if (!container) continue;
 
-    container.classList.add('masonry-no-image', 'masonry-always-label');
-
-    if (!entry || entry.items.length === 0) {
+    const files = category.files ?? [];
+    if (files.length === 0) {
       container.innerHTML = '';
       const empty = document.createElement('div');
       empty.className = 'text-gray-600';
       empty.textContent = 'Nenhum PDF encontrado nesta categoria.';
       container.appendChild(empty);
-      return;
+      continue;
     }
 
-    if (!instancesByKey.has(key)) {
-      const instance = createMasonry(container, entry.items, {
-        ease: 'sine.out',
-        duration: 0.6,
-        stagger: 0.05,
-        animateFrom: 'top',
-        scaleOnHover: true,
-        hoverScale: 0.97,
-        blurToFocus: false,
-        colorShiftOnHover: false
-      });
-      instancesByKey.set(key, instance);
-    } else {
-      instancesByKey.get(key)?.relayout?.();
+    container.innerHTML = '';
+    for (const file of files) {
+      const rawTitle = String(file.name ?? '');
+      container.appendChild(
+        createStudiesCard({
+          title: rawTitle,
+          url: resolveSiteUrl(prefix, file.url)
+        })
+      );
     }
   }
-
-  window.__studiesMasonry = {
-    activate: (key) => ensureMounted(key)
-  };
-
-  const activeTab = document.querySelector('[role="tab"][aria-selected="true"]');
-  const initialKey = activeTab?.getAttribute('data-target') || (data.categories?.[0]?.key ?? '');
-  if (initialKey) ensureMounted(initialKey);
 
   initAosAndFeather();
 }
