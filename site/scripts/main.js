@@ -753,16 +753,37 @@ async function renderStudies() {
   }
 
   document.querySelectorAll('.pdfflix__row').forEach((row) => {
-    const rails = row.querySelectorAll('.pdfflix__rail');
-    if (rails.length === 0) return;
-    row.querySelectorAll('.pdfflix__nav').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const dir = Number(btn.dataset.dir || 1);
-        const step = 520;
-        rails.forEach((rail) => {
-          rail.scrollBy({ left: dir * step, behavior: 'smooth' });
+    row.querySelectorAll('.pdfflix__railWrap').forEach((wrap) => {
+      const rail = wrap.querySelector('.pdfflix__rail');
+      if (!rail) return;
+
+      const leftBtn = wrap.querySelector('.pdfflix__nav--left');
+      const rightBtn = wrap.querySelector('.pdfflix__nav--right');
+
+      function updateNavState() {
+        const maxScroll = rail.scrollWidth - rail.clientWidth;
+        const atStart = rail.scrollLeft <= 2;
+        const atEnd = rail.scrollLeft >= maxScroll - 2;
+
+        if (leftBtn) leftBtn.classList.toggle('pdfflix__nav--hidden', atStart);
+        if (rightBtn) rightBtn.classList.toggle('pdfflix__nav--hidden', atEnd || maxScroll <= 0);
+      }
+
+      if (leftBtn) {
+        leftBtn.addEventListener('click', () => {
+          rail.scrollBy({ left: -520, behavior: 'smooth' });
         });
-      });
+      }
+
+      if (rightBtn) {
+        rightBtn.addEventListener('click', () => {
+          rail.scrollBy({ left: 520, behavior: 'smooth' });
+        });
+      }
+
+      rail.addEventListener('scroll', () => updateNavState());
+      window.addEventListener('resize', () => updateNavState());
+      updateNavState();
     });
   });
 
