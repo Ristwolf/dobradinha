@@ -667,6 +667,13 @@ async function renderStudies() {
     const name = card.querySelector('.pdfCard__name');
     if (name) name.textContent = title;
 
+    const thumb = card.querySelector('.pdfCard__thumb');
+    if (thumb && window.pdfjsLib?.getDocument) {
+      renderPdfThumb(url, thumb).catch(() => {
+        // keep fallback
+      });
+    }
+
     const item = { title, url };
     card.addEventListener('click', () => openModal(item));
     card.addEventListener('keydown', (e) => {
@@ -677,6 +684,36 @@ async function renderStudies() {
     });
 
     return card;
+  }
+
+  async function renderPdfThumb(pdfUrl, thumbHost) {
+    if (!window.pdfjsLib) return;
+    if (!window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.js';
+    }
+
+    const loadingTask = window.pdfjsLib.getDocument({ url: pdfUrl });
+    const pdf = await loadingTask.promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 0.7 });
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) return;
+
+    canvas.width = Math.floor(viewport.width);
+    canvas.height = Math.floor(viewport.height);
+
+    await page.render({ canvasContext: ctx, viewport }).promise;
+
+    const img = new Image();
+    img.alt = '';
+    img.src = canvas.toDataURL('image/jpeg', 0.85);
+    img.loading = 'lazy';
+
+    thumbHost.innerHTML = '';
+    thumbHost.appendChild(img);
   }
 
   for (const category of data.categories ?? []) {
