@@ -602,22 +602,80 @@ async function renderStudies() {
     return;
   }
 
+  const modal = document.getElementById('pdfflixModal');
+  const modalTitle = document.getElementById('pdfflixModalTitle');
+  const modalDesc = document.getElementById('pdfflixModalDesc');
+  const modalFrame = document.getElementById('pdfflixModalFrame');
+  const openNewTab = document.getElementById('pdfflixOpenNewTab');
+  const downloadLink = document.getElementById('pdfflixDownload');
+
+  function openModal(item) {
+    if (!modal || !modalTitle || !modalFrame || !openNewTab || !downloadLink) return;
+    modalTitle.textContent = item.title || 'PDF';
+    if (modalDesc) modalDesc.textContent = '';
+    modalFrame.src = item.url;
+    openNewTab.href = item.url;
+    downloadLink.href = item.url;
+
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    if (!modal || !modalFrame) return;
+    modal.setAttribute('aria-hidden', 'true');
+    modalFrame.src = 'about:blank';
+    document.body.style.overflow = '';
+  }
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target && e.target.matches('[data-close]')) closeModal();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (modal.getAttribute('aria-hidden') === 'false' && e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  }
+
   function createStudiesCard({ title, url }) {
-    const card = document.createElement('a');
-    card.className = 'netflix-card';
-    card.href = url;
-    card.target = '_blank';
-    card.rel = 'noopener';
+    const card = document.createElement('div');
+    card.className = 'pdfCard';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Abrir PDF: ${title}`);
 
-    const poster = document.createElement('div');
-    poster.className = 'netflix-poster';
+    card.innerHTML = `
+      <div class="pdfCard__thumb">
+        <div class="pdfCard__fallback">PDF</div>
+      </div>
 
-    const label = document.createElement('div');
-    label.className = 'netflix-title';
-    label.textContent = title;
+      <div class="pdfCard__overlay"></div>
 
-    card.appendChild(poster);
-    card.appendChild(label);
+      <div class="pdfCard__info">
+        <div class="pdfCard__name"></div>
+
+        <div class="pdfCard__actions">
+          <div class="pdfPlay" aria-hidden="true">▶</div>
+          <div class="pdfCard__cta">Abrir</div>
+        </div>
+      </div>
+    `;
+
+    const name = card.querySelector('.pdfCard__name');
+    if (name) name.textContent = title;
+
+    const item = { title, url };
+    card.addEventListener('click', () => openModal(item));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(item);
+      }
+    });
+
     return card;
   }
 
@@ -647,6 +705,18 @@ async function renderStudies() {
       );
     }
   }
+
+  document.querySelectorAll('.pdfflix__row').forEach((row) => {
+    const rail = row.querySelector('.pdfflix__rail');
+    if (!rail) return;
+    row.querySelectorAll('.pdfflix__arrow').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const dir = Number(btn.dataset.dir || 1);
+        const step = 520;
+        rail.scrollBy({ left: dir * step, behavior: 'smooth' });
+      });
+    });
+  });
 
   initAosAndFeather();
 }
