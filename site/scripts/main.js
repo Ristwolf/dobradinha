@@ -35,6 +35,7 @@ function initTabs() {
   if (tabs.length === 0 || panels.length === 0) return;
 
   const isResumosPage = Boolean(document.querySelector('[data-page="resumos"]'));
+  const isStudiesPage = Boolean(document.querySelector('[data-page="studies"]'));
   const hashAliases = isResumosPage
     ? {
         historia: 'history',
@@ -101,6 +102,14 @@ function initTabs() {
     if (isResumosPage) {
       try {
         window.__resumosMasonry?.activate?.(key);
+      } catch {
+        // ignore
+      }
+    }
+
+    if (isStudiesPage) {
+      try {
+        window.__studiesMasonry?.activate?.(key);
       } catch {
         // ignore
       }
@@ -589,6 +598,85 @@ async function renderResumos() {
   initAosAndFeather();
 }
 
+async function renderStudies() {
+  const page = document.querySelector('[data-page="studies"]');
+  if (!page) return;
+
+  const prefix = getSiteRelativePrefix();
+
+  let data;
+  try {
+    data = await fetchJson(prefix + 'data/studies.json');
+  } catch {
+    return;
+  }
+
+  const itemsByKey = new Map();
+  for (const category of data.categories ?? []) {
+    const files = category.files ?? [];
+    const items = files.map((file, index) => {
+      const seed = hashStringToInt(`${category.key}:${file.name}`);
+      const height = 260 + (seed % 520); // 260..779
+
+      const rawTitle = String(file.name ?? '');
+
+      return {
+        id: `${category.key}:${index}`,
+        img: '',
+        url: resolveSiteUrl(prefix, file.url),
+        title: rawTitle,
+        height
+      };
+    });
+    itemsByKey.set(category.key, { title: category.title ?? category.key, items });
+  }
+
+  const instancesByKey = new Map();
+
+  function ensureMounted(key) {
+    const entry = itemsByKey.get(key);
+    const container = document.querySelector(`[data-studies-container="${CSS.escape(key)}"]`);
+    if (!container) return;
+
+    container.classList.add('masonry-no-image', 'masonry-always-label');
+
+    if (!entry || entry.items.length === 0) {
+      container.innerHTML = '';
+      const empty = document.createElement('div');
+      empty.className = 'text-gray-600';
+      empty.textContent = 'Nenhum PDF encontrado nesta categoria.';
+      container.appendChild(empty);
+      return;
+    }
+
+    if (!instancesByKey.has(key)) {
+      const instance = createMasonry(container, entry.items, {
+        ease: 'sine.out',
+        duration: 0.6,
+        stagger: 0.05,
+        animateFrom: 'top',
+        scaleOnHover: true,
+        hoverScale: 0.97,
+        blurToFocus: false,
+        colorShiftOnHover: false
+      });
+      instancesByKey.set(key, instance);
+    } else {
+      instancesByKey.get(key)?.relayout?.();
+    }
+  }
+
+  window.__studiesMasonry = {
+    activate: (key) => ensureMounted(key)
+  };
+
+  const activeTab = document.querySelector('[role="tab"][aria-selected="true"]');
+  const initialKey = activeTab?.getAttribute('data-target') || (data.categories?.[0]?.key ?? '');
+  if (initialKey) ensureMounted(initialKey);
+
+  initAosAndFeather();
+}
+
 function createVideoCard({ id, title, thumb }) {
   const article = document.createElement('article');
   article.className = 'bg-white rounded-lg overflow-hidden shadow-md card';
@@ -672,5 +760,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   initTabs();
 
   await renderResumos();
+  await renderStudies();
   await renderVideos();
 });

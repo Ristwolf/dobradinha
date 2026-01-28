@@ -32,6 +32,18 @@ async function copyResumosCategories({ resumosSrc, resumosDest }) {
   }
 }
 
+async function copyStudiesCategories({ studiesSrc, studiesDest }) {
+  const categoryDirs = ['bible', 'books', 'family'];
+  await ensureDir(studiesDest);
+
+  for (const category of categoryDirs) {
+    const srcDir = path.join(studiesSrc, category);
+    const destDir = path.join(studiesDest, category);
+    await rm(destDir, { recursive: true, force: true });
+    await cp(srcDir, destDir, { recursive: true });
+  }
+}
+
 async function main() {
   await ensureDir(siteDir);
   await ensureDir(outDataDir);
@@ -46,12 +58,19 @@ async function main() {
   const resumosDest = path.join(siteDir, 'resumos');
   await copyResumosCategories({ resumosSrc, resumosDest });
 
+  const studiesSrc = path.join(repoRoot, 'studies');
+  const studiesDest = path.join(siteDir, 'studies');
+  await copyStudiesCategories({ studiesSrc, studiesDest });
+
   // Prevent Jekyll processing on GitHub Pages.
   await writeFile(path.join(siteDir, '.nojekyll'), '', 'utf8');
 
   // Generate JSON data used by the pages.
   const { generateResumosJson } = await import('./gen-resumos.mjs');
   await generateResumosJson({ siteDir });
+
+  const { generateStudiesJson } = await import('./gen-studies.mjs');
+  await generateStudiesJson({ siteDir });
 
   const { generateVideosJson } = await import('./gen-videos.mjs');
   await generateVideosJson({ siteDir, channelId: process.env.YOUTUBE_CHANNEL_ID ?? '' });

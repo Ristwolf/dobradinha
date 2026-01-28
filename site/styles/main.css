@@ -143,6 +143,15 @@
   transform: translateY(0);
 }
 
+.masonry-always-label .masonry-hover-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.masonry-no-image .masonry-item-img {
+  background: linear-gradient(160deg, #111827 0%, #4b5563 100%);
+}
+
 
 .masonry-color-overlay {
   display: none;
