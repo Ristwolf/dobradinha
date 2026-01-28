@@ -147,7 +147,7 @@
 .pdfflix {
   padding: 24px;
   color: #fff;
-  background: #0b0b10;
+  background: #c7c7ce;
   border-radius: 18px;
   overflow: hidden;
 }
@@ -187,19 +187,19 @@
 
 .pdfflix__carousel {
   position: relative;
-  padding: 6px 0 10px;
+  padding: 18px 0 20px;
 }
 
 .pdfflix__rails {
   display: grid;
-  gap: 18px;
+  gap: 22px;
   overflow: visible;
 }
 
 .pdfflix__railWrap {
   position: relative;
   overflow: visible;
-  padding: 4px 0 10px;
+  padding: 10px 0 18px;
 }
 
 .pdfflix__nav {
@@ -245,7 +245,7 @@
   grid-auto-columns: 210px;
   gap: 14px;
   overflow-x: auto;
-  padding: 12px 0 14px;
+  padding: 18px 0 20px;
   overflow-y: visible;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
