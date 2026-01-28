@@ -718,39 +718,50 @@ async function renderStudies() {
 
   for (const category of data.categories ?? []) {
     const key = category.key;
-    const container = document.querySelector(`[data-studies-container="${CSS.escape(key)}"]`);
-    if (!container) continue;
+    const containers = document.querySelectorAll(`[data-studies-container="${CSS.escape(key)}"]`);
+    const topRail = containers[0] ?? null;
+    const bottomRail = containers[1] ?? null;
+    if (!topRail || !bottomRail) continue;
 
     const files = category.files ?? [];
     if (files.length === 0) {
-      container.innerHTML = '';
+      topRail.innerHTML = '';
+      bottomRail.innerHTML = '';
       const empty = document.createElement('div');
       empty.className = 'text-gray-600';
       empty.textContent = 'Nenhum PDF encontrado nesta categoria.';
-      container.appendChild(empty);
+      topRail.appendChild(empty);
       continue;
     }
 
-    container.innerHTML = '';
-    for (const file of files) {
+    topRail.innerHTML = '';
+    bottomRail.innerHTML = '';
+    for (let i = 0; i < files.length; i += 1) {
+      const file = files[i];
       const rawTitle = String(file.name ?? '');
-      container.appendChild(
-        createStudiesCard({
-          title: rawTitle,
-          url: resolveSiteUrl(prefix, file.url)
-        })
-      );
+      const card = createStudiesCard({
+        title: rawTitle,
+        url: resolveSiteUrl(prefix, file.url)
+      });
+
+      if (i % 2 === 0) {
+        topRail.appendChild(card);
+      } else {
+        bottomRail.appendChild(card);
+      }
     }
   }
 
   document.querySelectorAll('.pdfflix__row').forEach((row) => {
-    const rail = row.querySelector('.pdfflix__rail');
-    if (!rail) return;
-    row.querySelectorAll('.pdfflix__arrow').forEach((btn) => {
+    const rails = row.querySelectorAll('.pdfflix__rail');
+    if (rails.length === 0) return;
+    row.querySelectorAll('.pdfflix__nav').forEach((btn) => {
       btn.addEventListener('click', () => {
         const dir = Number(btn.dataset.dir || 1);
         const step = 520;
-        rail.scrollBy({ left: dir * step, behavior: 'smooth' });
+        rails.forEach((rail) => {
+          rail.scrollBy({ left: dir * step, behavior: 'smooth' });
+        });
       });
     });
   });

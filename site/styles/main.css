@@ -147,7 +147,7 @@
 .pdfflix {
   padding: 24px;
   color: #fff;
-  background: radial-gradient(1200px 600px at 20% 0%, #1f1f2b 0%, #0b0b10 55%, #07070a 100%);
+  background: #0b0b10;
   border-radius: 18px;
   overflow: hidden;
 }
@@ -185,34 +185,51 @@
   opacity: 0.95;
 }
 
-.pdfflix__arrows {
-  display: flex;
-  gap: 8px;
+.pdfflix__carousel {
+  position: relative;
 }
 
-.pdfflix__arrow {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
+.pdfflix__rails {
+  display: grid;
+  gap: 14px;
+}
+
+.pdfflix__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(10, 10, 12, 0.8);
   color: #fff;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1;
-  transition: transform 0.12s ease, background 0.12s ease;
+  transition: transform 0.12s ease, background 0.12s ease, opacity 0.12s ease;
+  z-index: 2;
+  opacity: 0.85;
 }
 
-.pdfflix__arrow:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: scale(1.03);
+.pdfflix__nav:hover {
+  background: rgba(20, 20, 24, 0.95);
+  transform: translateY(-50%) scale(1.04);
+  opacity: 1;
+}
+
+.pdfflix__nav--left {
+  left: -10px;
+}
+
+.pdfflix__nav--right {
+  right: -10px;
 }
 
 .pdfflix__rail {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 210px;
-  grid-template-rows: repeat(2, 1fr);
   gap: 14px;
   overflow-x: auto;
   padding-bottom: 6px;
@@ -430,6 +447,12 @@
 @media (max-width: 560px) {
   .pdfflix__rail {
     grid-auto-columns: 170px;
+  }
+
+  .pdfflix__nav {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
   }
 
   .pdfCard {
