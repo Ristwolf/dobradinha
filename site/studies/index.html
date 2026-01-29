@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Instituto Hack</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -14,6 +15,7 @@
   <link rel="stylesheet" href="../styles/main.css">
   <script src="../scripts/main.js" defer></script>
 </head>
+
 <body class="font-serif bg-gray-50">
 
   <nav class="bg-white shadow-sm sticky top-0 z-50">
@@ -45,18 +47,18 @@
     </div>
   </header>
 
-  <main
-    class="py-16 bg-white" style="padding-top:2rem;"
-    id="tabs"
-    data-page="studies"
-  >
+  <main class="py-16 bg-white" style="padding-top:2rem;" id="tabs" data-page="studies">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <section class="pdfflix" data-aos="fade-up">
         <div class="w-full overflow-x-auto">
-          <div class="flex flex-wrap justify-center gap-4 border-b border-white/10 pb-2" role="tablist" aria-label="Categorias de estudos">
-            <button class="tab px-4 py-2 text-gray-200 hover:text-amber-300 transition" role="tab" aria-selected="true" aria-controls="panel-bible" id="tab-bible" data-target="bible">Bíblia</button>
-            <button class="tab px-4 py-2 text-gray-200 hover:text-amber-300 transition" role="tab" aria-selected="false" aria-controls="panel-books" id="tab-books" data-target="books">Livros</button>
-            <button class="tab px-4 py-2 text-gray-200 hover:text-amber-300 transition" role="tab" aria-selected="false" aria-controls="panel-family" id="tab-family" data-target="family">Família</button>
+          <div class="flex flex-wrap justify-center gap-4 border-b border-white/10 pb-2" role="tablist"
+            aria-label="Categorias de estudos">
+            <button class="tab px-4 py-2 text-gray-200 hover:text-amber-300 transition" role="tab" aria-selected="true"
+              aria-controls="panel-bible" id="tab-bible" data-target="bible">Bíblia</button>
+            <button class="tab px-4 py-2 text-gray-200 hover:text-amber-300 transition" role="tab" aria-selected="false"
+              aria-controls="panel-books" id="tab-books" data-target="books">Livros</button>
+            <button class="tab px-4 py-2 text-gray-200 hover:text-amber-300 transition" role="tab" aria-selected="false"
+              aria-controls="panel-family" id="tab-family" data-target="family">Família</button>
           </div>
         </div>
 
@@ -67,67 +69,103 @@
                 <h3>Bíblia</h3>
               </div>
               <div class="pdfflix__carousel">
-                <div class="pdfflix__rails"> 
-                  <div class="pdfflix__railWrap" data-rail-wrap="top">
-                    <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left" type="button">‹</button>
-                    <div class="pdfflix__rail" data-studies-container="bible" data-rail="top" style="padding-left: 24px;"></div>
-                    <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right" type="button">›</button>
-                  </div>
-                  <div class="pdfflix__railWrap" data-rail-wrap="bottom">
-                    <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left" type="button">‹</button>
-                    <div class="pdfflix__rail" data-studies-container="bible" data-rail="bottom" style="padding-left: 24px;"></div>
-                    <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right" type="button">›</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="panel-books" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-books" data-panel="books">
-            <div class="pdfflix__row" data-row="books">
-              <div class="pdfflix__rowHead">
-                <h3>Livros</h3>
-              </div>
-              <div class="pdfflix__carousel">
                 <div class="pdfflix__rails">
                   <div class="pdfflix__railWrap" data-rail-wrap="top">
-                    <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left" type="button">‹</button>
-                    <div class="pdfflix__rail" data-studies-container="books" data-rail="top" style="padding-left: 24px;"></div>
-                    <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right" type="button">›</button>
+                    <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left"
+                      type="button">‹</button>
+                    <div class="pdfflix__rail" data-studies-container="bible" data-rail="top"
+                      style="padding-left: 24px;"></div>
+                    <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right"
+                      type="button">›</button>
+                  </div>
+
+                  <div class="pdfflix__rowHead">
+                    <h3>Livros</h3>
                   </div>
                   <div class="pdfflix__railWrap" data-rail-wrap="bottom">
-                    <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left" type="button">‹</button>
-                    <div class="pdfflix__rail" data-studies-container="books" data-rail="bottom" style="padding-left: 24px;"></div>
-                    <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right" type="button">›</button>
+                    <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left"
+                      type="button">‹</button>
+                    <div class="pdfflix__rail" data-studies-container="bible" data-rail="bottom"
+                      style="padding-left: 24px;"></div>
+                    <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right"
+                      type="button">›</button>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div id="panel-family" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-family" data-panel="family">
-            <div class="pdfflix__row" data-row="family">
               <div class="pdfflix__rowHead">
                 <h3>Família</h3>
               </div>
-              <div class="pdfflix__carousel">
-                <div class="pdfflix__rails">
-                  <div class="pdfflix__railWrap" data-rail-wrap="top">
-                    <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left" type="button">‹</button>
-                    <div class="pdfflix__rail" data-studies-container="family" data-rail="top" style="padding-left: 24px;"></div>
-                    <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right" type="button">›</button>
-                  </div>
-                  <div class="pdfflix__railWrap" data-rail-wrap="bottom">
-                    <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left" type="button">‹</button>
-                    <div class="pdfflix__rail" data-studies-container="family" data-rail="bottom" style="padding-left: 24px;"></div>
-                    <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right" type="button">›</button>
-                  </div>
-                </div>
+              <div class="pdfflix__railWrap" data-rail-wrap="bottom">
+                <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left"
+                  type="button">‹</button>
+                <div class="pdfflix__rail" data-studies-container="bible" data-rail="bottom"
+                  style="padding-left: 24px;"></div>
+                <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right"
+                  type="button">›</button>
               </div>
             </div>
           </div>
-        </section>
-      </section>
+    </div>
+    </div>
+
+    <div id="panel-books" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-books" data-panel="books">
+      <div class="pdfflix__row" data-row="books">
+        <div class="pdfflix__rowHead">
+          <h3>Livros</h3>
+        </div>
+        <div class="pdfflix__carousel">
+          <div class="pdfflix__rails">
+            <div class="pdfflix__railWrap" data-rail-wrap="top">
+              <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left"
+                type="button">‹</button>
+              <div class="pdfflix__rail" data-studies-container="books" data-rail="top" style="padding-left: 24px;">
+              </div>
+              <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right"
+                type="button">›</button>
+            </div>
+            <div class="pdfflix__railWrap" data-rail-wrap="bottom">
+              <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left"
+                type="button">‹</button>
+              <div class="pdfflix__rail" data-studies-container="books" data-rail="bottom" style="padding-left: 24px;">
+              </div>
+              <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right"
+                type="button">›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-family" class="tab-panel hidden-panel" role="tabpanel" aria-labelledby="tab-family"
+      data-panel="family">
+      <div class="pdfflix__row" data-row="family">
+        <div class="pdfflix__rowHead">
+          <h3>Família</h3>
+        </div>
+        <div class="pdfflix__carousel">
+          <div class="pdfflix__rails">
+            <div class="pdfflix__railWrap" data-rail-wrap="top">
+              <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left"
+                type="button">‹</button>
+              <div class="pdfflix__rail" data-studies-container="family" data-rail="top" style="padding-left: 24px;">
+              </div>
+              <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right"
+                type="button">›</button>
+            </div>
+            <div class="pdfflix__railWrap" data-rail-wrap="bottom">
+              <button class="pdfflix__nav pdfflix__nav--left" data-dir="-1" aria-label="Scroll left"
+                type="button">‹</button>
+              <div class="pdfflix__rail" data-studies-container="family" data-rail="bottom" style="padding-left: 24px;">
+              </div>
+              <button class="pdfflix__nav pdfflix__nav--right" data-dir="1" aria-label="Scroll right"
+                type="button">›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </section>
+    </section>
     </div>
   </main>
 
@@ -160,4 +198,5 @@
   </footer>
 
 </body>
+
 </html>
