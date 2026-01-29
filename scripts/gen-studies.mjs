@@ -37,9 +37,34 @@ export async function generateStudiesJson({ siteDir }) {
   const studiesRoot = path.join(siteDir, 'studies');
 
   const categoryDefs = [
-    { key: 'bible', title: 'Bíblia' },
-    { key: 'books', title: 'Livros' },
-    { key: 'family', title: 'Família' }
+    {
+      key: 'bible',
+      title: 'Bíblia',
+      sections: [
+        { key: 'dt', title: 'Deuteronômio' },
+        { key: 'sermons', title: 'Sermões' },
+        { key: 'studies', title: 'Estudos' },
+        { key: 'teology', title: 'Teologia' }
+      ]
+    },
+    {
+      key: 'books',
+      title: 'Livros',
+      sections: [
+        { key: 'general', title: 'Geral' },
+        { key: 'teology', title: 'Teologia' }
+      ]
+    },
+    {
+      key: 'family',
+      title: 'Família',
+      sections: [
+        { key: 'children', title: 'Filhos' },
+        { key: 'conflicts', title: 'Conflitos' },
+        { key: 'life', title: 'Vida' },
+        { key: 'marriage', title: 'Casamento' }
+      ]
+    }
   ];
 
   const result = {
@@ -49,33 +74,47 @@ export async function generateStudiesJson({ siteDir }) {
 
   for (const category of categoryDefs) {
     const categoryDir = path.join(studiesRoot, category.key);
+    const sections = [];
+    let totalCount = 0;
 
-    let pdfPaths = [];
-    try {
-      const st = await stat(categoryDir);
-      if (st.isDirectory()) {
-        pdfPaths = await listPdfFilesRecursively(categoryDir);
+    for (const section of category.sections ?? []) {
+      const sectionDir = path.join(categoryDir, section.key);
+
+      let pdfPaths = [];
+      try {
+        const st = await stat(sectionDir);
+        if (st.isDirectory()) {
+          pdfPaths = await listPdfFilesRecursively(sectionDir);
+        }
+      } catch {
+        // Section folder missing; keep empty.
       }
-    } catch {
-      // Category folder missing; keep empty.
+
+      pdfPaths.sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+      const files = pdfPaths.map((absPath) => {
+        const relFromSite = path.relative(siteDir, absPath);
+        const url = toUrlPath(relFromSite);
+        return {
+          name: humanizeFilename(path.basename(absPath)),
+          url
+        };
+      });
+
+      totalCount += files.length;
+      sections.push({
+        key: section.key,
+        title: section.title,
+        count: files.length,
+        files
+      });
     }
-
-    pdfPaths.sort((a, b) => a.localeCompare(b, 'pt-BR'));
-
-    const files = pdfPaths.map((absPath) => {
-      const relFromSite = path.relative(siteDir, absPath);
-      const url = toUrlPath(relFromSite);
-      return {
-        name: humanizeFilename(path.basename(absPath)),
-        url
-      };
-    });
 
     result.categories.push({
       key: category.key,
       title: category.title,
-      count: files.length,
-      files
+      count: totalCount,
+      sections
     });
   }
 

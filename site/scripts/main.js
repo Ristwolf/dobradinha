@@ -737,37 +737,44 @@ async function renderStudies() {
   }
 
   for (const category of data.categories ?? []) {
-    const key = category.key;
-    const containers = document.querySelectorAll(`[data-studies-container="${CSS.escape(key)}"]`);
-    const topRail = containers[0] ?? null;
-    const bottomRail = containers[1] ?? null;
-    if (!topRail || !bottomRail) continue;
+    const categoryKey = category.key;
+    for (const section of category.sections ?? []) {
+      const sectionKey = section.key;
+      const containers = document.querySelectorAll(
+        `[data-studies-container="${CSS.escape(categoryKey)}"][data-studies-section="${CSS.escape(sectionKey)}"]`
+      );
+      if (containers.length === 0) continue;
 
-    const files = category.files ?? [];
-    if (files.length === 0) {
-      topRail.innerHTML = '';
-      bottomRail.innerHTML = '';
-      const empty = document.createElement('div');
-      empty.className = 'text-gray-600';
-      empty.textContent = 'Nenhum PDF encontrado nesta categoria.';
-      topRail.appendChild(empty);
-      continue;
-    }
-
-    topRail.innerHTML = '';
-    bottomRail.innerHTML = '';
-    for (let i = 0; i < files.length; i += 1) {
-      const file = files[i];
-      const rawTitle = String(file.name ?? '');
-      const card = createStudiesCard({
-        title: rawTitle,
-        url: resolveSiteUrl(prefix, file.url)
+      containers.forEach((container) => {
+        container.innerHTML = '';
       });
 
-      if (i % 2 === 0) {
-        topRail.appendChild(card);
-      } else {
-        bottomRail.appendChild(card);
+      const files = section.files ?? [];
+      if (files.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'text-gray-600';
+        empty.textContent = 'Nenhum PDF encontrado nesta categoria.';
+        containers[0].appendChild(empty);
+        continue;
+      }
+
+      const topRail = Array.from(containers).find((el) => el.dataset.rail === 'top') ?? containers[0];
+      const bottomRail =
+        Array.from(containers).find((el) => el.dataset.rail === 'bottom') ?? (containers.length > 1 ? containers[1] : null);
+
+      for (let i = 0; i < files.length; i += 1) {
+        const file = files[i];
+        const rawTitle = String(file.name ?? '');
+        const card = createStudiesCard({
+          title: rawTitle,
+          url: resolveSiteUrl(prefix, file.url)
+        });
+
+        if (bottomRail && i % 2 !== 0) {
+          bottomRail.appendChild(card);
+        } else {
+          topRail.appendChild(card);
+        }
       }
     }
   }
