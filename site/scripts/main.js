@@ -814,6 +814,19 @@ async function renderStudies() {
     });
   });
 
+  document.querySelectorAll('.pdfflix__rail').forEach((rail) => {
+    rail.addEventListener(
+      'wheel',
+      (event) => {
+        if (event.shiftKey) return;
+        if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+        rail.scrollBy({ left: event.deltaY, behavior: 'auto' });
+        event.preventDefault();
+      },
+      { passive: false }
+    );
+  });
+
   initAosAndFeather();
 }
 
