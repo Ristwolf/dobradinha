@@ -29,6 +29,55 @@ function initMobileMenuPlaceholder() {
   });
 }
 
+function initPdfflixCarousel() {
+  document.querySelectorAll('.pdfflix__railWrap').forEach((wrap) => {
+    const rail = wrap.querySelector('.pdfflix__rail');
+    if (!rail) return;
+    if (rail.dataset.carouselBound === 'true') return;
+
+    const leftBtn = wrap.querySelector('.pdfflix__nav--left');
+    const rightBtn = wrap.querySelector('.pdfflix__nav--right');
+
+    function updateNavState() {
+      const maxScroll = rail.scrollWidth - rail.clientWidth;
+      const atStart = rail.scrollLeft <= 2;
+      const atEnd = rail.scrollLeft >= maxScroll - 2;
+
+      if (leftBtn) leftBtn.classList.toggle('pdfflix__nav--hidden', atStart);
+      if (rightBtn) rightBtn.classList.toggle('pdfflix__nav--hidden', atEnd || maxScroll <= 0);
+    }
+
+    if (leftBtn) {
+      leftBtn.addEventListener('click', () => {
+        rail.scrollBy({ left: -520, behavior: 'smooth' });
+      });
+    }
+
+    if (rightBtn) {
+      rightBtn.addEventListener('click', () => {
+        rail.scrollBy({ left: 520, behavior: 'smooth' });
+      });
+    }
+
+    rail.addEventListener('scroll', () => updateNavState());
+    window.addEventListener('resize', () => updateNavState());
+    updateNavState();
+
+    rail.addEventListener(
+      'wheel',
+      (event) => {
+        if (event.shiftKey) return;
+        if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+        rail.scrollBy({ left: event.deltaY, behavior: 'auto' });
+        event.preventDefault();
+      },
+      { passive: false }
+    );
+
+    rail.dataset.carouselBound = 'true';
+  });
+}
+
 function initTabs() {
   const tabs = document.querySelectorAll('[role="tab"]');
   const panels = document.querySelectorAll('.tab-panel');
@@ -775,53 +824,7 @@ async function renderStudies() {
     }
   }
 
-  document.querySelectorAll('.pdfflix__row').forEach((row) => {
-    row.querySelectorAll('.pdfflix__railWrap').forEach((wrap) => {
-      const rail = wrap.querySelector('.pdfflix__rail');
-      if (!rail) return;
-
-      const leftBtn = wrap.querySelector('.pdfflix__nav--left');
-      const rightBtn = wrap.querySelector('.pdfflix__nav--right');
-
-      function updateNavState() {
-        const maxScroll = rail.scrollWidth - rail.clientWidth;
-        const atStart = rail.scrollLeft <= 2;
-        const atEnd = rail.scrollLeft >= maxScroll - 2;
-
-        if (leftBtn) leftBtn.classList.toggle('pdfflix__nav--hidden', atStart);
-        if (rightBtn) rightBtn.classList.toggle('pdfflix__nav--hidden', atEnd || maxScroll <= 0);
-      }
-
-      if (leftBtn) {
-        leftBtn.addEventListener('click', () => {
-          rail.scrollBy({ left: -520, behavior: 'smooth' });
-        });
-      }
-
-      if (rightBtn) {
-        rightBtn.addEventListener('click', () => {
-          rail.scrollBy({ left: 520, behavior: 'smooth' });
-        });
-      }
-
-      rail.addEventListener('scroll', () => updateNavState());
-      window.addEventListener('resize', () => updateNavState());
-      updateNavState();
-    });
-  });
-
-  document.querySelectorAll('.pdfflix__rail').forEach((rail) => {
-    rail.addEventListener(
-      'wheel',
-      (event) => {
-        if (event.shiftKey) return;
-        if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-        rail.scrollBy({ left: event.deltaY, behavior: 'auto' });
-        event.preventDefault();
-      },
-      { passive: false }
-    );
-  });
+  initPdfflixCarousel();
 
   initAosAndFeather();
 }
@@ -907,8 +910,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   initYear();
   initMobileMenuPlaceholder();
   initTabs();
+  initPdfflixCarousel();
 
   await renderResumos();
   await renderStudies();
   await renderVideos();
+  initPdfflixCarousel();
 });
