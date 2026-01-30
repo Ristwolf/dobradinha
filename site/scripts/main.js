@@ -66,24 +66,24 @@ function initTabs() {
     if (panel.querySelector('.masonry-list')) {
       gsap.fromTo(panel, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, ease: 'power1.out' });
       return;
-    }
+      async function ensurePdfJsLoaded(timeoutMs = 4000) {
+        if (window.pdfjsLib?.getDocument) return true;
 
-    const cards = panel.querySelectorAll('.card');
-    if (cards.length === 0) {
-      gsap.fromTo(panel, { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: 0.25, ease: 'power1.out' });
-      return;
-    }
-
-    gsap.fromTo(
-      cards,
-      { autoAlpha: 0, y: 10 },
-      { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power1.out', stagger: 0.04, clearProps: 'opacity,transform' }
-    );
-  }
-
-  function activateTab(targetKey, { setHash = false } = {}) {
-    const key = canonicalizeKey(targetKey);
-
+        return await new Promise((resolve) => {
+          let waited = 0;
+          const interval = 100;
+          const timer = setInterval(() => {
+            waited += interval;
+            if (window.pdfjsLib?.getDocument) {
+              clearInterval(timer);
+              resolve(true);
+            } else if (waited >= timeoutMs) {
+              clearInterval(timer);
+              resolve(false);
+            }
+          }, interval);
+        });
+      }
     tabs.forEach((tab) => {
       const active = tab.dataset.target === key;
       tab.setAttribute('aria-selected', active ? 'true' : 'false');
@@ -128,40 +128,47 @@ function initTabs() {
   function activateFromHash() {
     let hash = window.location.hash.replace('#', '');
     try {
-      hash = decodeURIComponent(hash);
-    } catch {
-      // ignore
-    }
+      document.querySelectorAll('.pdfflix__row').forEach((row) => {
+        row.querySelectorAll('.pdfflix__railWrap').forEach((wrap) => {
+          const rail = wrap.querySelector('.pdfflix__rail');
+          if (!rail) return;
 
-    const canonical = canonicalizeKey(hash);
-    if (hash && canonical !== hash) setHashWithoutJump(canonical);
+          const hasCards = Boolean(rail.querySelector('.pdfCard'));
+          const leftBtn = wrap.querySelector('.pdfflix__nav--left');
+          const rightBtn = wrap.querySelector('.pdfflix__nav--right');
 
-    if (canonical && document.querySelector(`[data-target="${CSS.escape(canonical)}"]`)) {
-      activateTab(canonical);
-      return;
-    }
+          if (!hasCards) {
+            if (leftBtn) leftBtn.classList.add('pdfflix__nav--hidden');
+            if (rightBtn) rightBtn.classList.add('pdfflix__nav--hidden');
+            return;
+          }
 
-    activateTab(tabs[0].dataset.target);
-  }
+          function updateNavState() {
+            const maxScroll = rail.scrollWidth - rail.clientWidth;
+            const atStart = rail.scrollLeft <= 2;
+            const atEnd = rail.scrollLeft >= maxScroll - 2;
 
-  window.addEventListener('hashchange', activateFromHash);
-  if (isResumosPage) {
-    // For non-resumos pages, we don't want to hijack hash navigation.
-    activateFromHash();
-  } else {
-    activateTab(tabs[0].dataset.target);
-  }
-}
+            if (leftBtn) leftBtn.classList.toggle('pdfflix__nav--hidden', atStart);
+            if (rightBtn) rightBtn.classList.toggle('pdfflix__nav--hidden', atEnd || maxScroll <= 0);
+          }
 
-function resolveSiteUrl(prefix, url) {
-  if (!url) return url;
-  if (/^https?:\/\//i.test(url)) return url;
-  if (url.startsWith('/')) return url;
-  return prefix + url.replace(/^\.\//, '');
-}
+          if (leftBtn) {
+            leftBtn.addEventListener('click', () => {
+              rail.scrollBy({ left: -520, behavior: 'smooth' });
+            });
+          }
 
-async function fetchJson(url) {
-  const res = await fetch(url, { cache: 'no-store' });
+          if (rightBtn) {
+            rightBtn.addEventListener('click', () => {
+              rail.scrollBy({ left: 520, behavior: 'smooth' });
+            });
+          }
+
+          rail.addEventListener('scroll', () => updateNavState());
+          window.addEventListener('resize', () => updateNavState());
+          updateNavState();
+        });
+      });
   if (!res.ok) throw new Error(`Failed to load ${url}: ${res.status}`);
   return await res.json();
 }
@@ -751,10 +758,6 @@ async function renderStudies() {
 
       const files = section.files ?? [];
       if (files.length === 0) {
-        const empty = document.createElement('div');
-        empty.className = 'text-gray-600';
-        empty.textContent = 'Nenhum PDF encontrado nesta categoria.';
-        containers[0].appendChild(empty);
         continue;
       }
 
