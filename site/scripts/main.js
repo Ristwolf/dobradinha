@@ -33,7 +33,7 @@ function initPdfflixCarousel() {
   document.querySelectorAll('.pdfflix__railWrap').forEach((wrap) => {
     const rail = wrap.querySelector('.pdfflix__rail');
     if (!rail) return;
-    if (rail.dataset.carouselBound === 'true') return;
+    const hasCards = Boolean(rail.querySelector('.pdfCard'));
 
     const leftBtn = wrap.querySelector('.pdfflix__nav--left');
     const rightBtn = wrap.querySelector('.pdfflix__nav--right');
@@ -43,8 +43,18 @@ function initPdfflixCarousel() {
       const atStart = rail.scrollLeft <= 2;
       const atEnd = rail.scrollLeft >= maxScroll - 2;
 
-      if (leftBtn) leftBtn.classList.toggle('pdfflix__nav--hidden', atStart);
-      if (rightBtn) rightBtn.classList.toggle('pdfflix__nav--hidden', atEnd || maxScroll <= 0);
+      if (leftBtn) leftBtn.classList.toggle('pdfflix__nav--hidden', atStart || !hasCards);
+      if (rightBtn) rightBtn.classList.toggle('pdfflix__nav--hidden', atEnd || maxScroll <= 0 || !hasCards);
+    }
+
+    if (!hasCards) {
+      updateNavState();
+      return;
+    }
+
+    if (rail.dataset.carouselBound === 'true') {
+      updateNavState();
+      return;
     }
 
     if (leftBtn) {
@@ -63,16 +73,19 @@ function initPdfflixCarousel() {
     window.addEventListener('resize', () => updateNavState());
     updateNavState();
 
-    rail.addEventListener(
-      'wheel',
-      (event) => {
-        if (event.shiftKey) return;
-        if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-        rail.scrollBy({ left: event.deltaY, behavior: 'auto' });
-        event.preventDefault();
-      },
-      { passive: false }
-    );
+    if (!rail.dataset.wheelBound) {
+      rail.addEventListener(
+        'wheel',
+        (event) => {
+          if (event.shiftKey) return;
+          if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+          rail.scrollBy({ left: event.deltaY, behavior: 'auto' });
+          event.preventDefault();
+        },
+        { passive: false }
+      );
+      rail.dataset.wheelBound = 'true';
+    }
 
     rail.dataset.carouselBound = 'true';
   });
