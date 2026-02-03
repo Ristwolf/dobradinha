@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instituto Hack</title>
+    <title>Watch Our YouTube Videos | Instituto Hack</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -39,34 +39,118 @@
     </nav>
 
     <!-- Hero -->
-    <header class="hero-bg min-h-[28vh] flex items-center justify-center text-white">
+    <header class="hero-bg min-h-[34vh] flex items-center justify-center text-white">
         <div class="text-center px-4" data-aos="fade-up">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4">Vídeos</h1>
-            <p class="text-lg md:text-xl opacity-90">Seleção de vídeos do canal</p>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Watch Our YouTube Videos</h1>
+            <p class="text-lg md:text-xl opacity-90">Latest videos by our father and son author duo.</p>
+            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#video-gallery" class="bg-amber-600 hover:bg-amber-700 text-white px-7 py-3 rounded-full font-medium transition">
+                    Videos Page
+                </a>
+                <a href="https://www.youtube.com/channel/UCjrk1H8o2CdH0YQ9CcgZGvw" target="_blank" rel="noopener" class="border-2 border-white text-white hover:bg-white hover:text-gray-900 px-7 py-3 rounded-full font-medium transition">
+                    YouTube Channel
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Videos Grid -->
     <main id="videos" class="py-16 bg-white" data-page="videos">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12" data-aos="fade-up">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Últimos vídeos</h2>
-                <p class="text-gray-600 mt-2">Clique para assistir diretamente na página</p>
-            </div>
+            <section class="bg-amber-50 rounded-2xl shadow-md overflow-hidden" data-aos="fade-up">
+                <div class="flex flex-col lg:flex-row">
+                    <div class="lg:w-7/12">
+                        <img src="http://static.photos/workspace/1200x520/31" alt="10 Tips for Aspiring Writers" class="w-full h-64 lg:h-full object-cover">
+                    </div>
+                    <div class="lg:w-5/12 p-8 lg:p-12 flex flex-col justify-center">
+                        <p class="text-amber-700 font-semibold tracking-wide uppercase text-sm">Featured Video</p>
+                        <h2 class="text-3xl font-bold text-gray-900 mt-2">10 Tips for Aspiring Writers</h2>
+                        <p class="text-gray-700 mt-4">John and David share their top ten tips for new and aspiring writers.</p>
+                        <div class="mt-6 flex flex-col sm:flex-row gap-4">
+                            <a href="https://www.youtube.com/channel/UCjrk1H8o2CdH0YQ9CcgZGvw" target="_blank" rel="noopener" class="bg-amber-600 hover:bg-amber-700 text-white px-7 py-3 rounded-full font-medium transition text-center">
+                                Watch Now
+                            </a>
+                            <a href="#video-gallery" class="border-2 border-amber-700 text-amber-800 hover:bg-amber-700 hover:text-white px-7 py-3 rounded-full font-medium transition text-center">
+                                Browse Videos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <div class="max-w-3xl mx-auto text-center text-gray-600" data-videos-empty hidden>
-                <p>Nenhum vídeo disponível no momento.</p>
-                <p class="mt-2 text-sm">Dica: configure o canal e faça novo deploy para atualizar.</p>
-            </div>
+            <section id="video-gallery" class="mt-16" data-aos="fade-up">
+                <div class="text-center mb-12">
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800">Video Gallery</h3>
+                    <p class="text-gray-600 mt-2">Explore our latest writing insights and behind-the-scenes moments.</p>
+                </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-videos-grid></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <img src="http://static.photos/workspace/640x360/41" alt="Writing Thrilling Suspense" class="w-full h-40 object-cover">
+                        <div class="p-5">
+                            <h4 class="text-lg font-bold text-gray-800">Writing Thrilling Suspense</h4>
+                            <p class="text-gray-600 mt-2 text-sm">Tips on crafting tension and suspense.</p>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <img src="http://static.photos/workspace/640x360/42" alt="Creating Authentic Characters" class="w-full h-40 object-cover">
+                        <div class="p-5">
+                            <h4 class="text-lg font-bold text-gray-800">Creating Authentic Characters</h4>
+                            <p class="text-gray-600 mt-2 text-sm">Character building techniques.</p>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <img src="http://static.photos/workspace/640x360/43" alt="5 Mistakes New Authors Make" class="w-full h-40 object-cover">
+                        <div class="p-5">
+                            <h4 class="text-lg font-bold text-gray-800">5 Mistakes New Authors Make</h4>
+                            <p class="text-gray-600 mt-2 text-sm">Common pitfalls to avoid.</p>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <img src="http://static.photos/workspace/640x360/44" alt="Writing Historical Fiction" class="w-full h-40 object-cover">
+                        <div class="p-5">
+                            <h4 class="text-lg font-bold text-gray-800">Writing Historical Fiction</h4>
+                            <p class="text-gray-600 mt-2 text-sm">Historical storytelling strategies.</p>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <img src="http://static.photos/workspace/640x360/45" alt="The Father–Son Writing Process" class="w-full h-40 object-cover">
+                        <div class="p-5">
+                            <h4 class="text-lg font-bold text-gray-800">The Father–Son Writing Process</h4>
+                            <p class="text-gray-600 mt-2 text-sm">How we collaborate.</p>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <img src="http://static.photos/workspace/640x360/46" alt="Inside Our Writing Routine" class="w-full h-40 object-cover">
+                        <div class="p-5">
+                            <h4 class="text-lg font-bold text-gray-800">Inside Our Writing Routine</h4>
+                            <p class="text-gray-600 mt-2 text-sm">Daily habits and processes.</p>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <img src="http://static.photos/workspace/640x360/47" alt="Developing Strong Story Plots" class="w-full h-40 object-cover">
+                        <div class="p-5">
+                            <h4 class="text-lg font-bold text-gray-800">Developing Strong Story Plots</h4>
+                            <p class="text-gray-600 mt-2 text-sm">Structuring engaging narratives.</p>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <img src="http://static.photos/workspace/640x360/48" alt="Overcoming Writer’s Block" class="w-full h-40 object-cover">
+                        <div class="p-5">
+                            <h4 class="text-lg font-bold text-gray-800">Overcoming Writer’s Block</h4>
+                            <p class="text-gray-600 mt-2 text-sm">Staying creative under pressure.</p>
+                        </div>
+                    </article>
+                </div>
 
-            <div class="text-center mt-12" data-aos="fade-up">
-                    <a href="https://www.youtube.com/channel/UCjrk1H8o2CdH0YQ9CcgZGvw" target="_blank" rel="noopener"
-                       class="inline-block border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white px-6 py-2 rounded-full font-medium transition">
-                        Ver mais no YouTube
-                </a>
-            </div>
+                <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="../videos/" class="bg-amber-600 hover:bg-amber-700 text-white px-7 py-3 rounded-full font-medium transition text-center">
+                        Videos Page
+                    </a>
+                    <a href="https://www.youtube.com/channel/UCjrk1H8o2CdH0YQ9CcgZGvw" target="_blank" rel="noopener" class="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white px-7 py-3 rounded-full font-medium transition text-center">
+                        Visit YouTube
+                    </a>
+                </div>
+            </section>
         </div>
     </main>
 
