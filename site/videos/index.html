@@ -55,64 +55,23 @@
                     <p class="text-gray-600 mt-2">Assista aos nossos conteúdos mais recentes.</p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <img src="http://static.photos/workspace/640x360/41" alt="Writing Thrilling Suspense" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <h4 class="text-lg font-bold text-gray-800">Writing Thrilling Suspense</h4>
-                            <p class="text-gray-600 mt-2 text-sm">Tips on crafting tension and suspense.</p>
-                        </div>
-                    </article>
-                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <img src="http://static.photos/workspace/640x360/42" alt="Creating Authentic Characters" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <h4 class="text-lg font-bold text-gray-800">Creating Authentic Characters</h4>
-                            <p class="text-gray-600 mt-2 text-sm">Character building techniques.</p>
-                        </div>
-                    </article>
-                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <img src="http://static.photos/workspace/640x360/43" alt="5 Mistakes New Authors Make" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <h4 class="text-lg font-bold text-gray-800">5 Mistakes New Authors Make</h4>
-                            <p class="text-gray-600 mt-2 text-sm">Common pitfalls to avoid.</p>
-                        </div>
-                    </article>
-                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <img src="http://static.photos/workspace/640x360/44" alt="Writing Historical Fiction" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <h4 class="text-lg font-bold text-gray-800">Writing Historical Fiction</h4>
-                            <p class="text-gray-600 mt-2 text-sm">Historical storytelling strategies.</p>
-                        </div>
-                    </article>
-                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <img src="http://static.photos/workspace/640x360/45" alt="The Father–Son Writing Process" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <h4 class="text-lg font-bold text-gray-800">The Father–Son Writing Process</h4>
-                            <p class="text-gray-600 mt-2 text-sm">How we collaborate.</p>
-                        </div>
-                    </article>
-                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <img src="http://static.photos/workspace/640x360/46" alt="Inside Our Writing Routine" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <h4 class="text-lg font-bold text-gray-800">Inside Our Writing Routine</h4>
-                            <p class="text-gray-600 mt-2 text-sm">Daily habits and processes.</p>
-                        </div>
-                    </article>
-                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <img src="http://static.photos/workspace/640x360/47" alt="Developing Strong Story Plots" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <h4 class="text-lg font-bold text-gray-800">Developing Strong Story Plots</h4>
-                            <p class="text-gray-600 mt-2 text-sm">Structuring engaging narratives.</p>
-                        </div>
-                    </article>
-                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <img src="http://static.photos/workspace/640x360/48" alt="Overcoming Writer’s Block" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <h4 class="text-lg font-bold text-gray-800">Overcoming Writer’s Block</h4>
-                            <p class="text-gray-600 mt-2 text-sm">Staying creative under pressure.</p>
-                        </div>
-                    </article>
+                <!-- Player -->
+                <div class="mb-10">
+                    <div class="aspect-video w-full rounded-xl overflow-hidden shadow-md bg-black">
+                        <iframe
+                            id="video-player"
+                            class="w-full h-full"
+                            src="https://www.youtube.com/embed/"
+                            title="Player do YouTube"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                 </div>
+
+                <!-- Dynamic grid -->
+                <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
 
                 <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="../videos/" class="bg-amber-600 hover:bg-amber-700 text-white px-7 py-3 rounded-full font-medium transition text-center">
@@ -133,5 +92,74 @@
         </div>
     </footer>
 
+    <script>
+        // YouTube Data API v3
+        const YT_API_KEY = "REPLACE_WITH_YOUR_API_KEY";
+        const YT_CHANNEL_ID = "REPLACE_WITH_CHANNEL_ID";
+        const MAX_RESULTS = 8;
+
+        const grid = document.getElementById("video-grid");
+        const player = document.getElementById("video-player");
+
+        async function loadVideos() {
+            if (!YT_API_KEY || !YT_CHANNEL_ID || YT_API_KEY.includes("REPLACE")) {
+                grid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Configure sua API key e CHANNEL_ID.</p>`;
+                return;
+            }
+
+            const url = new URL("https://www.googleapis.com/youtube/v3/search");
+            url.searchParams.set("key", YT_API_KEY);
+            url.searchParams.set("channelId", YT_CHANNEL_ID);
+            url.searchParams.set("part", "snippet");
+            url.searchParams.set("order", "date");
+            url.searchParams.set("maxResults", MAX_RESULTS);
+            url.searchParams.set("type", "video");
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (!data.items || data.items.length === 0) {
+                    grid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Nenhum vídeo encontrado.</p>`;
+                    return;
+                }
+
+                // Set first video in player
+                const firstId = data.items[0].id.videoId;
+                player.src = `https://www.youtube.com/embed/${firstId}`;
+
+                grid.innerHTML = data.items.map(item => {
+                    const videoId = item.id.videoId;
+                    const title = item.snippet.title;
+                    const desc = item.snippet.description || "";
+                    const thumb = item.snippet.thumbnails?.medium?.url || "";
+
+                    return `
+                        <article class="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition"
+                                 data-video-id="${videoId}">
+                            <img src="${thumb}" alt="${title}" class="w-full h-40 object-cover">
+                            <div class="p-5">
+                                <h4 class="text-lg font-bold text-gray-800">${title}</h4>
+                                <p class="text-gray-600 mt-2 text-sm">${desc.slice(0, 90)}${desc.length > 90 ? "..." : ""}</p>
+                            </div>
+                        </article>
+                    `;
+                }).join("");
+
+                grid.querySelectorAll("article").forEach(card => {
+                    card.addEventListener("click", () => {
+                        const id = card.getAttribute("data-video-id");
+                        player.src = `https://www.youtube.com/embed/${id}`;
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                    });
+                });
+
+            } catch (err) {
+                grid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Erro ao carregar vídeos.</p>`;
+            }
+        }
+
+        loadVideos();
+    </script>
 </body>
 </html>
