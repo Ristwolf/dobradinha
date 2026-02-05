@@ -38,14 +38,6 @@
         </div>
     </nav>
 
-    <!-- Hero -->
-    <header class="hero-bg min-h-[34vh] flex items-center justify-center text-white">
-        <div class="text-center px-4" data-aos="fade-up">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4">Assista nossos vídeos</h1>
-            <p class="text-lg md:text-xl opacity-90">ùltimos vídeos disponíveis no canal do YouTube.</p>
-        </div>
-    </header>
-
     <main id="videos" class="py-16 bg-white" data-page="videos">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -73,13 +65,10 @@
                 <!-- Dynamic grid -->
                 <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
 
-                <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="../videos/" class="bg-amber-600 hover:bg-amber-700 text-white px-7 py-3 rounded-full font-medium transition text-center">
-                        Videos Page
-                    </a>
-                    <a href="https://www.youtube.com/channel/UCjrk1H8o2CdH0YQ9CcgZGvw" target="_blank" rel="noopener" class="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white px-7 py-3 rounded-full font-medium transition text-center">
-                        Visit YouTube
-                    </a>
+                <div class="mt-12 flex justify-center">
+                    <button id="load-more" class="bg-amber-600 hover:bg-amber-700 text-white px-7 py-3 rounded-full font-medium transition">
+                        Carregar mais
+                    </button>
                 </div>
             </section>
         </div>
@@ -100,10 +89,15 @@
 
         const grid = document.getElementById("video-grid");
         const player = document.getElementById("video-player");
+        const loadMoreBtn = document.getElementById("load-more");
+
+        let nextPageToken = "";
+        let firstLoad = true;
 
         async function loadVideos() {
             if (!YT_API_KEY || !YT_CHANNEL_ID || YT_API_KEY.includes("REPLACE")) {
                 grid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Configure sua API key e CHANNEL_ID.</p>`;
+                loadMoreBtn?.setAttribute("disabled", "true");
                 return;
             }
 
@@ -114,21 +108,29 @@
             url.searchParams.set("order", "date");
             url.searchParams.set("maxResults", MAX_RESULTS);
             url.searchParams.set("type", "video");
+            if (nextPageToken) url.searchParams.set("pageToken", nextPageToken);
 
             try {
+                loadMoreBtn.disabled = true;
                 const res = await fetch(url);
                 const data = await res.json();
 
                 if (!data.items || data.items.length === 0) {
-                    grid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Nenhum vídeo encontrado.</p>`;
+                    if (firstLoad) {
+                        grid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Nenhum vídeo encontrado.</p>`;
+                    }
+                    loadMoreBtn.style.display = "none";
                     return;
                 }
 
-                // Set first video in player
-                const firstId = data.items[0].id.videoId;
-                player.src = `https://www.youtube.com/embed/${firstId}`;
+                // Set first video in player only once
+                if (firstLoad) {
+                    const firstId = data.items[0].id.videoId;
+                    player.src = `https://www.youtube.com/embed/${firstId}`;
+                    firstLoad = false;
+                }
 
-                grid.innerHTML = data.items.map(item => {
+                const cards = data.items.map(item => {
                     const videoId = item.id.videoId;
                     const title = item.snippet.title;
                     const desc = item.snippet.description || "";
@@ -146,7 +148,11 @@
                     `;
                 }).join("");
 
+                grid.insertAdjacentHTML("beforeend", cards);
+
                 grid.querySelectorAll("article").forEach(card => {
+                    if (card.dataset.bound) return;
+                    card.dataset.bound = "true";
                     card.addEventListener("click", () => {
                         const id = card.getAttribute("data-video-id");
                         player.src = `https://www.youtube.com/embed/${id}`;
@@ -154,11 +160,19 @@
                     });
                 });
 
+                nextPageToken = data.nextPageToken || "";
+                if (!nextPageToken) loadMoreBtn.style.display = "none";
+                loadMoreBtn.disabled = false;
+
             } catch (err) {
-                grid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Erro ao carregar vídeos.</p>`;
+                if (firstLoad) {
+                    grid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Erro ao carregar vídeos.</p>`;
+                }
+                loadMoreBtn.disabled = false;
             }
         }
 
+        loadMoreBtn?.addEventListener("click", loadVideos);
         loadVideos();
     </script>
 </body>
