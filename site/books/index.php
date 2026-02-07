@@ -15,27 +15,7 @@
 <body class="font-serif bg-gray-50">
 
   <!-- Nav (global) -->
-  <nav class="bg-white shadow-sm sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <a href="../" class="text-xl font-bold text-gray-800">Instituto Hack</a>
-        </div>
-        <div class="hidden md:flex items-center space-x-8">
-          <a href="../" class="text-gray-800 hover:text-amber-600 transition">Home</a>
-          <a href="../studies/" class="text-gray-800 hover:text-amber-600 transition">Estudos</a>
-          <a href="../resumos/" class="text-gray-800 hover:text-amber-600 transition">Resumos</a>
-          <a href="../books/" class="text-gray-800 hover:text-amber-600 transition">Livros</a>
-          <a href="../videos/" class="text-gray-800 hover:text-amber-600 transition">Vídeos</a>
-          <a href="../about/" class="text-gray-800 hover:text-amber-600 transition">Sobre</a>
-          <a href="../#contact" class="text-gray-800 hover:text-amber-600 transition">Contato</a>
-        </div>
-        <div class="md:hidden flex items-center">
-          <button class="mobile-menu-button" aria-label="Abrir menu" type="button"><i data-feather="menu"></i></button>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <?php $basePath = '../'; include __DIR__ . '/../partials/navbar.php'; ?>
 
   <!-- Hero -->
   <header class="hero-bg min-h-[28vh] flex items-center justify-center text-white">
@@ -120,15 +100,15 @@
         <a href="https://www.amazon.com.br/Tolkien-B%C3%ADblia-teol%C3%B3gicas-legend%C3%A1rio-tolkieniano-ebook/dp/B08H7Y8R3C?ref_=ast_author_dp&th=1&psc=1"
            target="_blank" rel="noopener noreferrer"
            class="book-card bg-slate-50 rounded-lg overflow-hidden shadow-md block"
-           data-aos="fade-up" data-aos-delay="200">
+           data-aos="fade-up" data-aos-delay="300">
           <img src="../img/books/tolkien_e_a_biblia.jpg" alt="Tolkien e a Bíblia" class="w-full h-[37rem] object-cover">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xl font-bold text-gray-800">Tolkien e a Bíblia</h3>
-              <span class="badge">Novo</span>
+              <span class="badge">E-book</span>
             </div>
-            <p class="text-sm text-gray-500 mb-3">Jonathan Hack • Organizador</p>
-            <p class="text-gray-600 mb-4">Pesquisas teológicas no legendário tolkieniano</p>
+            <p class="text-sm text-gray-500 mb-3">Jonathan Hack • Autor</p>
+            <p class="text-gray-600 mb-4">Contribuições teológicas do legendário tolkieniano.</p>
             <div class="flex justify-between items-center">
               <span class="text-amber-600 font-medium">Ver na Amazon</span>
               <span class="text-gray-800 group-hover:text-amber-600 transition inline-flex items-center">
@@ -138,86 +118,18 @@
           </div>
         </a>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= Seção 2: Livros traduzidos — Jonathan ======= -->
-  <section id="books-jonathan-traduzidos" class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <h2 class="text-3xl font-bold text-gray-800 mb-4">Livros traduzidos — Jonathan</h2>
-        <p class="text-gray-600 max-w-2xl mx-auto">Obras traduzidas para o português por Jonathan Hack</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <a href="#"
+        <a href="https://www.amazon.com.br/Minha-hist%C3%B3ria-sobre-Ossos-ebook/dp/B0B7TB2TBB?ref_=ast_author_dp&th=1&psc=1"
            target="_blank" rel="noopener noreferrer"
-           class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
-           data-aos="fade-up" data-aos-delay="100">
-          <img src="http://static.photos/black/640x360/4" alt="Título Exemplo (tradução 1)" class="w-full h-[37rem] object-cover">
+           class="book-card bg-slate-50 rounded-lg overflow-hidden shadow-md block"
+           data-aos="fade-up" data-aos-delay="400">
+          <img src="../img/books/minha_historia_sobre_ossos.jpg" alt="Minha história sobre ossos" class="w-full h-[37rem] object-cover">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
-              <h3 class="text-xl font-bold text-gray-800">Título Exemplo (tradução 1)</h3>
-              <span class="badge">Tradução</span>
+              <h3 class="text-xl font-bold text-gray-800">Minha história sobre ossos</h3>
+              <span class="badge">E-book</span>
             </div>
-            <p class="text-sm text-gray-500 mb-3">Autor Internacional • Traduzido</p>
-            <p class="text-gray-600 mb-4">Edição comentada em português.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-amber-600 font-medium">Ver na Amazon</span>
-              <span class="text-gray-800 group-hover:text-amber-600 transition inline-flex items-center">
-                <span>Abrir</span><i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
-              </span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#"
-           target="_blank" rel="noopener noreferrer"
-           class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
-           data-aos="fade-up" data-aos-delay="200">
-          <img src="http://static.photos/black/640x360/5" alt="Título Exemplo (tradução 2)" class="w-full h-[37rem] object-cover">
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="text-xl font-bold text-gray-800">Título Exemplo (tradução 2)</h3>
-              <span class="badge">Tradução</span>
-            </div>
-            <p class="text-sm text-gray-500 mb-3">Autor Internacional • Traduzido</p>
-            <p class="text-gray-600 mb-4">Comentado e revisado.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-amber-600 font-medium">Ver na Amazon</span>
-              <span class="text-gray-800 group-hover:text-amber-600 transition inline-flex items-center">
-                <span>Abrir</span><i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
-              </span>
-            </div>
-          </div>
-        </a>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= Seção 3: Livros autorais — Osvaldo ======= -->
-  <section id="books-osvaldo-autorais" class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <h2 class="text-3xl font-bold text-gray-800 mb-4">Livros autorais — Osvaldo</h2>
-        <p class="text-gray-600 max-w-2xl mx-auto">Obras escritas por Osvaldo Hack</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <a href="#"
-           target="_blank" rel="noopener noreferrer"
-           class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
-           data-aos="fade-up" data-aos-delay="100">
-          <img src="http://static.photos/black/640x360/3" alt="Presbiterianismo catarinense" class="w-full h-[37rem] object-cover">
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="text-xl font-bold text-gray-800">Presbiterianismo catarinense</h3>
-              <span class="badge">Impresso</span>
-            </div>
-            <p class="text-sm text-gray-500 mb-3">Osvaldo Hack • Autor</p>
-            <p class="text-gray-600 mb-4">Título ilustrativo. Substitua e aponte para a Amazon.</p>
+            <p class="text-sm text-gray-500 mb-3">Jonathan Hack • Autor</p>
+            <p class="text-gray-600 mb-4">Notas de um caminhar vocacional e espiritual.</p>
             <div class="flex justify-between items-center">
               <span class="text-amber-600 font-medium">Ver na Amazon</span>
               <span class="text-gray-800 group-hover:text-amber-600 transition inline-flex items-center">
@@ -253,14 +165,7 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-400 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="mb-3">
-        <a href="../privacy/" class="hover:text-white transition">Política de privacidade</a>
-      </div>
-      <p>&copy; <span id="y"></span> institutohack. Todos os direitos reservados.</p>
-    </div>
-  </footer>
+  <?php include __DIR__ . '/../partials/footer.php'; ?>
 
 </body>
 </html>

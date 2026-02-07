@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=./index.php">
     <title>Instituto Hack</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -15,29 +14,7 @@
 </head>
 <body class="font-serif bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <span class="text-xl font-bold text-gray-800">Instituto Hack</span>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="./" class="text-gray-800 hover:text-amber-600 transition">Home</a>
-                    <a href="./studies/" class="text-gray-800 hover:text-amber-600 transition">Estudos</a>
-                    <a href="./resumos/" class="text-gray-800 hover:text-amber-600 transition">Resumos</a>
-                    <a href="./books/" class="text-gray-800 hover:text-amber-600 transition">Livros</a>
-                    <a href="./videos/" class="text-gray-800 hover:text-amber-600 transition">Vídeos</a>
-                    <a href="./about/" class="text-gray-800 hover:text-amber-600 transition">Sobre</a>
-                    <a href="./#contact" class="text-gray-800 hover:text-amber-600 transition">Contato</a>
-                </div>
-                <div class="md:hidden flex items-center">
-                    <button class="mobile-menu-button" type="button" aria-label="Abrir menu">
-                        <i data-feather="menu"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <?php $basePath = './'; include __DIR__ . '/partials/navbar.php'; ?>
 
     <!-- Hero Section -->
     <section class="hero-bg min-h-[50vh] flex items-center justify-center text-white">
@@ -239,92 +216,56 @@
 
             <div class="text-center mb-10" data-aos="fade-up">
                 <a href="./about/" class="inline-block bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-medium transition">
-                    Conheça os autores
+                    Ver a página Sobre
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Author 1 -->
-                <article class="bg-white rounded-xl shadow-md overflow-hidden" data-aos="fade-right">
-                    <div class="md:flex md:items-stretch">
-                        <div class="md:w-2/5 md:self-stretch md:relative md:overflow-hidden">
-                            <img src="./img/j.jpeg" alt="Jonathan Luís Hack" class="w-full h-64 md:absolute md:inset-0 md:w-full md:h-full object-cover block" />
-                        </div>
-                        <div class="md:w-3/5 p-8">
-                            <h3 class="text-2xl font-bold text-gray-800">Jonathan Luís Hack</h3>
-                            <p class="text-amber-700 font-medium mt-1">Pastor, Teólogo & Professor</p>
-
-                            <div class="mt-5 space-y-4 text-gray-600">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores inventore assumenda nostrum numquam nesciunt earum, quas eveniet voluptatem natus, rerum voluptas! Sit obcaecati suscipit blanditiis reprehenderit possimus fuga dolore saepe?</p>
-                            </div>
-
-                            <a href="./about/" class="inline-flex items-center mt-6 text-amber-600 hover:text-amber-700 font-medium">
-                                <span>Ver página dos autores</span>
-                                <i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
-                            </a>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                    <img src="./img/jonathan.jpg" alt="Jonathan Hack" class="w-full h-80 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Jonathan Hack</h3>
+                        <p class="text-gray-600">
+                            Teólogo, pastor presbiteriano, professor universitário e autor.
+                        </p>
                     </div>
-                </article>
-
-                <!-- Author 2 -->
-                <article class="bg-white rounded-xl shadow-md overflow-hidden" data-aos="fade-left">
-                    <div class="md:flex md:items-stretch">
-                        <div class="md:w-2/5 md:self-stretch md:relative md:overflow-hidden">
-                            <img src="./img/o.jpeg" alt="Osvaldo Hack" class="w-full h-64 md:absolute md:inset-0 md:w-full md:h-full object-cover block" />
-                        </div>
-                        <div class="md:w-3/5 p-8">
-                            <h3 class="text-2xl font-bold text-gray-800">Osvaldo Hack</h3>
-                            <p class="text-amber-700 font-medium mt-1">Autor & Pesquisador</p>
-
-                            <div class="mt-5 space-y-4 text-gray-600">
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, excepturi quod enim vel dicta ex a sint corporis dolore cum accusantium voluptates inventore adipisci iure eaque vero aperiam explicabo corrupti?</p>
-                                
-                            </div>
-
-                            <a href="./about/" class="inline-flex items-center mt-6 text-amber-600 hover:text-amber-700 font-medium">
-                                <span>Ver página dos autores</span>
-                                <i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
-                            </a>
-                        </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-md overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                    <img src="./img/osvaldo.jpg" alt="Osvaldo Hack" class="w-full h-80 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Osvaldo Hack</h3>
+                        <p class="text-gray-600">
+                            Teólogo, pastor presbiteriano e professor universitário.
+                        </p>
                     </div>
-                </article>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gray-100">
+    <section id="contact" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Entre em contato</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Eu me sentiria honrado em ouvir palavras de incentivo, críticas, sugestões e recomendações de textos a serem estudados.</p>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Contato</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Entre em contato conosco</p>
             </div>
 
-            <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-up">
-                <div class="md:flex">
-                    <div class="md:w-1/2 bg-amber-600 text-white p-8">
-                        <h3 class="text-xl font-bold mb-6">Contato</h3>
+            <div class="bg-gray-50 rounded-xl shadow-md overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Fale conosco</h3>
+                        <p class="text-gray-600 mb-6">
+                            Entre em contato conosco para perguntas, comentários ou solicitações.
+                        </p>
                         <div class="space-y-4">
-                            <div class="flex items-start">
-                                <i data-feather="mail" class="mr-4 mt-1"></i>
-                                <div>
-                                    <h4 class="font-medium">Email</h4>
-                                    <p>jonathan.hack@gmail.com</p>
-                                </div>
+                            <div class="flex items-start space-x-3">
+                                <i data-feather="mail" class="text-amber-600"></i>
+                                <span>contato@institutohack.com</span>
                             </div>
-                            <div class="flex items-start">
-                                <i data-feather="instagram" class="mr-4 mt-1"></i>
-                                <div>
-                                    <h4 class="font-medium">Instagram</h4>
-                                    <p>@jonathan.luis.hack</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <i data-feather="youtube" class="mr-4 mt-1"></i>
-                                <div>
-                                    <h4 class="font-medium">Youtube</h4>
-                                    <p><a href="https://www.youtube.com/channel/UCjrk1H8o2CdH0YQ9CcgZGvw" target="_blank" rel="noopener">youtube.com/JonathanHack</a></p>
-                                </div>
+                            <div class="flex items-start space-x-3">
+                                <i data-feather="map-pin" class="text-amber-600"></i>
+                                <span>São Paulo, Brasil</span>
                             </div>
                         </div>
                     </div>
@@ -370,49 +311,6 @@
     </section>-->
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-white text-lg font-medium mb-4">Jonathan Hack</h3>
-                    <p class="mb-4">Discípulo do Senhor Jesus Cristo.</p>
-                    <div class="flex space-x-4">
-                        <a href="https://www.youtube.com/channel/UCjrk1H8o2CdH0YQ9CcgZGvw" target="_blank" rel="noopener" class="hover:text-white transition"><i data-feather="youtube"></i></a>
-                        <a href="https://www.instagram.com/jonathan.luis.hack/" class="hover:text-white transition"><i data-feather="instagram"></i></a>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-white text-lg font-medium mb-4">Links Rápidos</h3>
-                    <ul class="space-y-2">
-                        <li><a href="./" class="hover:text-white transition">Home</a></li>
-                        <li><a href="./books/" class="hover:text-white transition">Livros</a></li>
-                        <li><a href="./about/" class="hover:text-white transition">Sobre</a></li>
-                        <li><a href="./studies/" class="hover:text-white transition">Estudos</a></li>
-                        <li><a href="./#contact" class="hover:text-white transition">Contato</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-white text-lg font-medium mb-4">Livros</h3>
-                    <ul class="space-y-2">
-                        <li><a href="./books/#books-jonathan-autorais" class="hover:text-white transition">Autorais Jonathan</a></li>
-                        <li><a href="./books/#books-jonathan-traduzidos" class="hover:text-white transition">Traduzidos Jonathan</a></li>
-                        <li><a href="./books/#books-osvaldo-autorais" class="hover:text-white transition">Autorais Osvaldo</a></li>
-                        <!-- <li><a href="./books/" class="hover:text-white transition">Veja mais livros</a></li> -->
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-white text-lg font-medium mb-4">Legal</h3>
-                    <ul class="space-y-2">
-                        <li><a href="./privacy/" class="hover:text-white transition">Política de privacidade</a></li>
-                        <li><a href="#" class="hover:text-white transition">Termos de Serviço</a></li>
-                        <li><a href="#" class="hover:text-white transition">Copyright</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
-                <p>&copy; <span id="y"></span> Jonathan Hack. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <?php include __DIR__ . '/partials/footer.php'; ?>
 </body>
 </html>

@@ -14,27 +14,8 @@
 </head>
 <body class="font-serif bg-gray-50">
 
-  <nav class="bg-white shadow-sm sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <a href="../" class="text-xl font-bold text-gray-800">Instituto Hack</a>
-        </div>
-        <div class="hidden md:flex items-center space-x-8">
-          <a href="../" class="text-gray-800 hover:text-amber-600 transition">Home</a>
-          <a href="../studies/" class="text-gray-800 hover:text-amber-600 transition">Estudos</a>
-          <a href="../resumos/" class="text-gray-800 hover:text-amber-600 transition">Resumos</a>
-          <a href="../books/" class="text-gray-800 hover:text-amber-600 transition">Livros</a>
-          <a href="../videos/" class="text-gray-800 hover:text-amber-600 transition">Vídeos</a>
-          <a href="../about/" class="text-gray-800 hover:text-amber-600 transition">Sobre</a>
-          <a href="../#contact" class="text-gray-800 hover:text-amber-600 transition">Contato</a>
-        </div>
-        <div class="md:hidden flex items-center">
-          <button class="mobile-menu-button" aria-label="Abrir menu" type="button"><i data-feather="menu"></i></button>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <?php $basePath = '../'; include __DIR__ . '/../partials/navbar.php'; ?>
+
     <div class="text-center px-4" data-aos="fade-up">
       <h1 class="py-16 text-4xl md:text-6xl font-bold mb-4">Meet the Authors</h1>
       <p class="text-lg md:text-xl opacity-90">Explore Their Journey</p>
@@ -103,14 +84,7 @@
     </div>
   </main>
 
-  <footer class="bg-gray-900 text-gray-400 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="mb-3">
-        <a href="../privacy/" class="hover:text-white transition">Política de privacidade</a>
-      </div>
-      <p>&copy; <span id="y"></span> institutohack. Todos os direitos reservados.</p>
-    </div>
-  </footer>
+  <?php include __DIR__ . '/../partials/footer.php'; ?>
 
 </body>
 </html>
