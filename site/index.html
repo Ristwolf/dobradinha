@@ -168,17 +168,54 @@
     <!-- Abstracts Section (links to resumos page) -->
     <section id="abstracts" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-up">
+            <div class="text-center mb-12" data-aos="fade-up">
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Resumos</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Resumos e extratos organizados por categoria</p>
+                <p class="text-gray-600 max-w-2xl mx-auto">Descubra ideias centrais em poucos minutos</p>
             </div>
 
-            <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-up">
-                <div class="p-8 text-center">
-                    <p class="text-gray-600 mb-6">Acesse a biblioteca de PDFs (resumos/extratos) por categoria.</p>
-                    <a href="./resumos/" class="inline-block bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-medium transition">
-                        Ver resumos
-                    </a>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch" data-aos="fade-up">
+                <div class="bg-white rounded-xl shadow-md p-8 flex flex-col justify-between">
+                    <div>
+                        <p class="text-amber-600 font-semibold mb-2">Leitura rápida</p>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Conheça todo o conteúdo!</h3>
+                        <p class="text-gray-600">Resumos e extratos organizados por tema, ideais para revisar ou começar um estudo.</p>
+                    </div>
+                    <div class="mt-6">
+                        <a href="./resumos/" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
+                            <span>Explorar resumos</span>
+                            <i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-amber-600 to-amber-700 text-white rounded-xl shadow-md p-8 flex flex-col justify-between">
+                    <div>
+                        <p class="uppercase tracking-wide text-sm opacity-80 mb-2">Destaques</p>
+                        <h3 class="text-2xl font-bold mb-4">Temas essenciais reunidos</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 mr-2"></i>Bíblia & Teologia</li>
+                            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 mr-2"></i>Vida cristã & Família</li>
+                            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 mr-2"></i>História & Ministério</li>
+                        </ul>
+                    </div>
+                    <div class="mt-6">
+                        <a href="./resumos/" class="inline-block bg-white text-amber-700 px-6 py-2 rounded-full font-semibold transition hover:bg-amber-50">
+                            Ver categorias
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-8 flex flex-col justify-between">
+                    <div>
+                        <p class="text-amber-600 font-semibold mb-2">Biblioteca em PDF</p>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Pronto para baixar e estudar</h3>
+                        <p class="text-gray-600">Acesse a biblioteca de PDFs (resumos/extratos) por categoria e leve para onde quiser.</p>
+                    </div>
+                    <div class="mt-6">
+                        <a href="./resumos/" class="inline-block bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-full font-medium transition">
+                            Ver resumos
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -192,37 +229,12 @@
                 <p class="text-gray-600 max-w-2xl mx-auto">Últimos vídeos do canal</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" data-aos="fade-up">
-                <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <img src="http://static.photos/workspace/640x360/61" alt="Writing Thrilling Suspense" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Writing Thrilling Suspense</h3>
-                        <p class="text-gray-600">Tips on crafting tension and suspense.</p>
-                    </div>
-                </article>
-                <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <img src="http://static.photos/workspace/640x360/62" alt="Creating Authentic Characters" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Creating Authentic Characters</h3>
-                        <p class="text-gray-600">Character building techniques.</p>
-                    </div>
-                </article>
-                <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <img src="http://static.photos/workspace/640x360/63" alt="Developing Strong Story Plots" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Developing Strong Story Plots</h3>
-                        <p class="text-gray-600">Structuring engaging narratives.</p>
-                    </div>
-                </article>
-            </div>
+            <div id="latest-videos" class="grid grid-cols-1 md:grid-cols-3 gap-8" data-aos="fade-up"></div>
 
             <div class="text-center mt-12" data-aos="fade-up">
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="./videos/" class="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-medium transition">
-                        Ver vídeos
-                    </a>
-                    <a href="https://www.youtube.com/channel/UCjrk1H8o2CdH0YQ9CcgZGvw" target="_blank" rel="noopener" class="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white px-8 py-3 rounded-full font-medium transition">
-                        Ir para o YouTube
+                        Veja todos os vídeos
                     </a>
                 </div>
             </div>
@@ -235,12 +247,6 @@
             <div class="text-center mb-14" data-aos="fade-up">
                 <h2 class="text-3xl font-bold text-gray-800">Sobre os autores</h2>
                 <p class="text-gray-600 mt-2">Conheça os dois autores por trás deste projeto</p>
-            </div>
-
-            <div class="text-center mb-10" data-aos="fade-up">
-                <a href="./about/" class="inline-block bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-medium transition">
-                    Conheça os autores
-                </a>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -264,6 +270,13 @@
                             </a>
                         </div>
                     </div>
+
+            <div class="text-center mb-10" data-aos="fade-up">
+                <a href="./about/" class="inline-block bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-medium transition">
+                    Conheça os autores
+                </a>
+            </div>
+
                 </article>
 
                 <!-- Author 2 -->
@@ -297,7 +310,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-aos="fade-up">
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Entre em contato</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Eu me sentiria honrado em ouvir palavras de incentivo, críticas, sugestões e recomendações de textos a serem estudados.</p>
+                <!-- <p class="text-gray-600 max-w-2xl mx-auto">Eu me sentiria honrado em ouvir palavras de incentivo, críticas, sugestões e recomendações de textos a serem estudados.</p> -->
             </div>
 
             <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden" data-aos="fade-up">
@@ -404,7 +417,6 @@
                     <h3 class="text-white text-lg font-medium mb-4">Legal</h3>
                     <ul class="space-y-2">
                         <li><a href="./privacy/" class="hover:text-white transition">Política de privacidade</a></li>
-                        <li><a href="#" class="hover:text-white transition">Termos de Serviço</a></li>
                         <li><a href="#" class="hover:text-white transition">Copyright</a></li>
                     </ul>
                 </div>
@@ -414,5 +426,65 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Latest 3 videos for homepage
+        const YT_API_KEY = "AIzaSyCTsJxWcQOJNiIwtfn52cmCAMAO83Vi5NA";
+        const YT_CHANNEL_ID = "UCjrk1H8o2CdH0YQ9CcgZGvw";
+        const LATEST_RESULTS = 3;
+
+        const latestGrid = document.getElementById("latest-videos");
+
+        async function loadLatestVideos() {
+            if (!latestGrid) return;
+            if (!YT_API_KEY || !YT_CHANNEL_ID || YT_API_KEY.includes("REPLACE")) {
+                latestGrid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Configure sua API key e CHANNEL_ID.</p>`;
+                return;
+            }
+
+            const url = new URL("https://www.googleapis.com/youtube/v3/search");
+            url.searchParams.set("key", YT_API_KEY);
+            url.searchParams.set("channelId", YT_CHANNEL_ID);
+            url.searchParams.set("part", "snippet");
+            url.searchParams.set("order", "date");
+            url.searchParams.set("maxResults", LATEST_RESULTS);
+            url.searchParams.set("type", "video");
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (!data.items || data.items.length === 0) {
+                    latestGrid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Nenhum vídeo encontrado.</p>`;
+                    return;
+                }
+
+                const cards = data.items.map(item => {
+                    const videoId = item.id.videoId;
+                    const title = item.snippet.title;
+                    const desc = item.snippet.description || "";
+                    const thumb = item.snippet.thumbnails?.medium?.url || "";
+
+                    return `
+                        <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                            <a href="./videos/?v=${videoId}" class="block">
+                                <img src="${thumb}" alt="${title}" class="w-full h-48 object-cover">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${title}</h3>
+                                    <p class="text-gray-600">${desc.slice(0, 120)}${desc.length > 120 ? "..." : ""}</p>
+                                </div>
+                            </a>
+                        </article>
+                    `;
+                }).join("");
+
+                latestGrid.innerHTML = cards;
+            } catch (err) {
+                latestGrid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Erro ao carregar vídeos.</p>`;
+            }
+        }
+
+        loadLatestVideos();
+    </script>
 </body>
 </html>
