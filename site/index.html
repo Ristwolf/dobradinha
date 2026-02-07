@@ -435,13 +435,35 @@
 
         const latestGrid = document.getElementById("latest-videos");
 
-        async function loadLatestVideos() {
-            if (!latestGrid) return;
-            if (!YT_API_KEY || !YT_CHANNEL_ID || YT_API_KEY.includes("REPLACE")) {
-                latestGrid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Configure sua API key e CHANNEL_ID.</p>`;
+        function renderLatestVideos(items) {
+            if (!items || items.length === 0) {
+                latestGrid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Nenhum vídeo encontrado.</p>`;
                 return;
             }
 
+            const cards = items.map(item => {
+                const videoId = item.videoId;
+                const title = item.title;
+                const desc = item.desc || "";
+                const thumb = item.thumb || "";
+
+                return `
+                    <article class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <a href="./videos/?v=${videoId}" class="block">
+                            <img src="${thumb}" alt="${title}" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">${title}</h3>
+                                <p class="text-gray-600">${desc.slice(0, 120)}${desc.length > 120 ? "..." : ""}</p>
+                            </div>
+                        </a>
+                    </article>
+                `;
+            }).join("");
+
+            latestGrid.innerHTML = cards;
+        }
+
+        async function loadLatestVideosFromApi() {
             const url = new URL("https://www.googleapis.com/youtube/v3/search");
             url.searchParams.set("key", YT_API_KEY);
             url.searchParams.set("channelId", YT_CHANNEL_ID);
@@ -450,37 +472,56 @@
             url.searchParams.set("maxResults", LATEST_RESULTS);
             url.searchParams.set("type", "video");
 
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
+            const res = await fetch(url);
+            const data = await res.json();
+            if (data?.error || !data.items) {
+                throw new Error(data?.error?.message || "YouTube API error");
+            }
 
-                if (!data.items || data.items.length === 0) {
-                    latestGrid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Nenhum vídeo encontrado.</p>`;
+            return data.items.map(item => ({
+                videoId: item.id.videoId,
+                title: item.snippet.title,
+                desc: item.snippet.description || "",
+                thumb: item.snippet.thumbnails?.medium?.url || ""
+            }));
+        }
+
+        async function loadLatestVideosFromFeed() {
+            const feedUrl = `https://r.jina.ai/http://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`;
+            const res = await fetch(feedUrl);
+            const text = await res.text();
+            const xml = new DOMParser().parseFromString(text, "text/xml");
+            const entries = Array.from(xml.getElementsByTagName("entry")).slice(0, LATEST_RESULTS);
+
+            return entries.map(entry => {
+                const videoId = entry.getElementsByTagName("yt:videoId")[0]?.textContent || "";
+                const title = entry.getElementsByTagName("title")[0]?.textContent || "";
+                const desc = entry.getElementsByTagName("media:description")[0]?.textContent || "";
+                const thumb = entry.getElementsByTagName("media:thumbnail")[0]?.getAttribute("url") || "";
+
+                return { videoId, title, desc, thumb };
+            }).filter(item => item.videoId);
+        }
+
+        async function loadLatestVideos() {
+            if (!latestGrid) return;
+
+            try {
+                if (!YT_API_KEY || YT_API_KEY.includes("REPLACE")) {
+                    const items = await loadLatestVideosFromFeed();
+                    renderLatestVideos(items);
                     return;
                 }
 
-                const cards = data.items.map(item => {
-                    const videoId = item.id.videoId;
-                    const title = item.snippet.title;
-                    const desc = item.snippet.description || "";
-                    const thumb = item.snippet.thumbnails?.medium?.url || "";
-
-                    return `
-                        <article class="bg-white rounded-xl shadow-md overflow-hidden">
-                            <a href="./videos/?v=${videoId}" class="block">
-                                <img src="${thumb}" alt="${title}" class="w-full h-48 object-cover">
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${title}</h3>
-                                    <p class="text-gray-600">${desc.slice(0, 120)}${desc.length > 120 ? "..." : ""}</p>
-                                </div>
-                            </a>
-                        </article>
-                    `;
-                }).join("");
-
-                latestGrid.innerHTML = cards;
+                const items = await loadLatestVideosFromApi();
+                renderLatestVideos(items);
             } catch (err) {
-                latestGrid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Erro ao carregar vídeos.</p>`;
+                try {
+                    const items = await loadLatestVideosFromFeed();
+                    renderLatestVideos(items);
+                } catch (fallbackErr) {
+                    latestGrid.innerHTML = `<p class="text-gray-600 col-span-full text-center">Erro ao carregar vídeos.</p>`;
+                }
             }
         }
 
