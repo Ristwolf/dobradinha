@@ -33,88 +33,56 @@ function initPdfflixCarousel() {
   document.querySelectorAll('.pdfflix__railWrap').forEach((wrap) => {
     const rail = wrap.querySelector('.pdfflix__rail');
     if (!rail) return;
-    const hasCards = Boolean(rail.querySelector('.pdfCard'));
 
     const leftBtn = wrap.querySelector('.pdfflix__nav--left');
     const rightBtn = wrap.querySelector('.pdfflix__nav--right');
 
-    function updateNavState() {
+    const updateNavState = () => {
       const maxScroll = rail.scrollWidth - rail.clientWidth;
       const atStart = rail.scrollLeft <= 2;
       const atEnd = rail.scrollLeft >= maxScroll - 2;
+      if (leftBtn) leftBtn.classList.toggle('pdfflix__nav--hidden', atStart || maxScroll <= 0);
+      if (rightBtn) rightBtn.classList.toggle('pdfflix__nav--hidden', atEnd || maxScroll <= 0);
+    };
 
-      if (leftBtn) leftBtn.classList.toggle('pdfflix__nav--hidden', atStart || !hasCards);
-      if (rightBtn) rightBtn.classList.toggle('pdfflix__nav--hidden', atEnd || maxScroll <= 0 || !hasCards);
-    }
+    if (!rail.dataset.carouselBound) {
+      if (leftBtn) {
+        leftBtn.addEventListener('click', () => {
+          rail.scrollBy({ left: -520, behavior: 'smooth' });
+        });
+      }
+      if (rightBtn) {
+        rightBtn.addEventListener('click', () => {
+          rail.scrollBy({ left: 520, behavior: 'smooth' });
+        });
+      }
 
-    if (!hasCards) {
-      updateNavState();
-      return;
-    }
-
-    if (rail.dataset.carouselBound === 'true') {
-      updateNavState();
-      return;
-    }
-
-    if (leftBtn) {
-      leftBtn.addEventListener('click', () => {
-        rail.scrollBy({ left: -520, behavior: 'smooth' });
-      });
-    }
-
-    if (rightBtn) {
-      rightBtn.addEventListener('click', () => {
-        rail.scrollBy({ left: 520, behavior: 'smooth' });
-      });
-    }
-
-    rail.addEventListener('scroll', () => updateNavState());
-    window.addEventListener('resize', () => updateNavState());
-    updateNavState();
-
-    if (!rail.dataset.wheelBound) {
-      rail.addEventListener(
-        'wheel',
-        (event) => {
-          if (rail.dataset.hovered !== 'true') return;
-          if (event.shiftKey) return;
-          if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-          rail.scrollBy({ left: event.deltaY, behavior: 'auto' });
-          event.preventDefault();
-        },
-        { passive: false }
-      );
-      rail.dataset.wheelBound = 'true';
-    }
-
-    if (!rail.dataset.hoverBound) {
-      rail.addEventListener('mouseenter', () => {
-        rail.dataset.hovered = 'true';
-      });
-      rail.addEventListener('mouseleave', () => {
-        rail.dataset.hovered = 'false';
-      });
-      rail.dataset.hoverBound = 'true';
-    }
-
-    if (!rail.dataset.dragBound) {
       let isDown = false;
       let startX = 0;
       let scrollLeft = 0;
       let dragged = false;
 
-      const startDrag = (event) => {
-        const x = typeof event.clientX === 'number' ? event.clientX : event.pageX;
-        if (typeof x !== 'number') return;
+      const onPointerDown = (event) => {
+        if (event.button !== 0) return;
         isDown = true;
         dragged = false;
-        startX = x;
+        startX = event.clientX;
         scrollLeft = rail.scrollLeft;
         rail.classList.add('is-dragging');
+        if (typeof rail.setPointerCapture === 'function') {
+          rail.setPointerCapture(event.pointerId);
+        }
       };
 
-      const stopDrag = () => {
+      const onPointerMove = (event) => {
+        if (!isDown) return;
+        const walk = event.clientX - startX;
+        if (!dragged && Math.abs(walk) > 6) dragged = true;
+        rail.scrollLeft = scrollLeft - walk;
+        event.preventDefault();
+      };
+
+      const onPointerUp = () => {
         if (!isDown) return;
         isDown = false;
         rail.classList.remove('is-dragging');
@@ -126,28 +94,11 @@ function initPdfflixCarousel() {
         }
       };
 
-      const onMove = (event) => {
-        if (!isDown) return;
-        const x = typeof event.clientX === 'number' ? event.clientX : event.pageX;
-        if (typeof x !== 'number') return;
-        const walk = x - startX;
-        if (!dragged && Math.abs(walk) > 6) dragged = true;
-        rail.scrollLeft = scrollLeft - walk;
-        event.preventDefault();
-      };
-
-      rail.addEventListener('pointerdown', (event) => {
-        if (event.button !== 0) return;
-        if (typeof rail.setPointerCapture === 'function') {
-          rail.setPointerCapture(event.pointerId);
-        }
-        startDrag(event);
-        event.preventDefault();
-      });
-      rail.addEventListener('pointermove', onMove);
-      rail.addEventListener('pointerup', stopDrag);
-      rail.addEventListener('pointercancel', stopDrag);
-      rail.addEventListener('pointerleave', stopDrag);
+      rail.addEventListener('pointerdown', onPointerDown);
+      rail.addEventListener('pointermove', onPointerMove);
+      rail.addEventListener('pointerup', onPointerUp);
+      rail.addEventListener('pointercancel', onPointerUp);
+      rail.addEventListener('pointerleave', onPointerUp);
 
       rail.addEventListener(
         'click',
@@ -160,10 +111,31 @@ function initPdfflixCarousel() {
         true
       );
 
-      rail.dataset.dragBound = 'true';
+      rail.addEventListener('mouseenter', () => {
+        rail.dataset.hovered = 'true';
+      });
+      rail.addEventListener('mouseleave', () => {
+        rail.dataset.hovered = 'false';
+      });
+
+      rail.addEventListener(
+        'wheel',
+        (event) => {
+          if (rail.dataset.hovered !== 'true') return;
+          if (event.shiftKey) return;
+          if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+          rail.scrollBy({ left: event.deltaY, behavior: 'auto' });
+          event.preventDefault();
+        },
+        { passive: false }
+      );
+
+      rail.dataset.carouselBound = 'true';
     }
 
-    rail.dataset.carouselBound = 'true';
+    updateNavState();
+    rail.addEventListener('scroll', updateNavState);
+    window.addEventListener('resize', updateNavState);
   });
 }
 
