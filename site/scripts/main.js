@@ -105,9 +105,11 @@ function initPdfflixCarousel() {
       let dragged = false;
 
       const startDrag = (event) => {
+        const x = typeof event.clientX === 'number' ? event.clientX : event.pageX;
+        if (typeof x !== 'number') return;
         isDown = true;
         dragged = false;
-        startX = event.pageX;
+        startX = x;
         scrollLeft = rail.scrollLeft;
         rail.classList.add('is-dragging');
       };
@@ -126,16 +128,21 @@ function initPdfflixCarousel() {
 
       const onMove = (event) => {
         if (!isDown) return;
-        const x = event.pageX;
+        const x = typeof event.clientX === 'number' ? event.clientX : event.pageX;
+        if (typeof x !== 'number') return;
         const walk = x - startX;
         if (!dragged && Math.abs(walk) > 6) dragged = true;
         rail.scrollLeft = scrollLeft - walk;
+        event.preventDefault();
       };
 
       rail.addEventListener('pointerdown', (event) => {
         if (event.button !== 0) return;
-        rail.setPointerCapture(event.pointerId);
+        if (typeof rail.setPointerCapture === 'function') {
+          rail.setPointerCapture(event.pointerId);
+        }
         startDrag(event);
+        event.preventDefault();
       });
       rail.addEventListener('pointermove', onMove);
       rail.addEventListener('pointerup', stopDrag);

@@ -264,6 +264,8 @@
   -ms-overflow-style: none;
   cursor: grab;
   user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
 }
 
 .pdfflix__rail::-webkit-scrollbar {
