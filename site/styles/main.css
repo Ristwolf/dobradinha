@@ -262,6 +262,8 @@
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  cursor: grab;
+  user-select: none;
 }
 
 .pdfflix__rail::-webkit-scrollbar {
@@ -271,6 +273,10 @@
 
 .pdfflix__rail::-webkit-scrollbar-thumb {
   background: transparent;
+}
+
+.pdfflix__rail.is-dragging {
+  cursor: grabbing;
 }
 
 .pdfCard {

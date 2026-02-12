@@ -77,6 +77,7 @@ function initPdfflixCarousel() {
       rail.addEventListener(
         'wheel',
         (event) => {
+          if (rail.dataset.hovered !== 'true') return;
           if (event.shiftKey) return;
           if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
           rail.scrollBy({ left: event.deltaY, behavior: 'auto' });
@@ -85,6 +86,74 @@ function initPdfflixCarousel() {
         { passive: false }
       );
       rail.dataset.wheelBound = 'true';
+    }
+
+    if (!rail.dataset.hoverBound) {
+      rail.addEventListener('mouseenter', () => {
+        rail.dataset.hovered = 'true';
+      });
+      rail.addEventListener('mouseleave', () => {
+        rail.dataset.hovered = 'false';
+      });
+      rail.dataset.hoverBound = 'true';
+    }
+
+    if (!rail.dataset.dragBound) {
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+      let dragged = false;
+
+      const startDrag = (event) => {
+        isDown = true;
+        dragged = false;
+        startX = event.pageX;
+        scrollLeft = rail.scrollLeft;
+        rail.classList.add('is-dragging');
+      };
+
+      const stopDrag = () => {
+        if (!isDown) return;
+        isDown = false;
+        rail.classList.remove('is-dragging');
+        rail.dataset.dragging = dragged ? 'true' : 'false';
+        if (dragged) {
+          setTimeout(() => {
+            rail.dataset.dragging = 'false';
+          }, 0);
+        }
+      };
+
+      const onMove = (event) => {
+        if (!isDown) return;
+        const x = event.pageX;
+        const walk = x - startX;
+        if (!dragged && Math.abs(walk) > 6) dragged = true;
+        rail.scrollLeft = scrollLeft - walk;
+      };
+
+      rail.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0) return;
+        rail.setPointerCapture(event.pointerId);
+        startDrag(event);
+      });
+      rail.addEventListener('pointermove', onMove);
+      rail.addEventListener('pointerup', stopDrag);
+      rail.addEventListener('pointercancel', stopDrag);
+      rail.addEventListener('pointerleave', stopDrag);
+
+      rail.addEventListener(
+        'click',
+        (event) => {
+          if (rail.dataset.dragging === 'true') {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        },
+        true
+      );
+
+      rail.dataset.dragBound = 'true';
     }
 
     rail.dataset.carouselBound = 'true';
