@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Livros Traduzidos • Instituto Hack</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link rel="stylesheet" href="../../styles/main.css">
+  <script src="../../scripts/main.js" defer></script>
+</head>
+<body class="font-serif bg-gray-50">
+
+  <!-- Nav (global) -->
+  <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../../" class="text-xl font-bold text-gray-800">Instituto Hack</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="../../" class="text-gray-800 hover:text-amber-600 transition">Home</a>
+          <a href="../../studies/" class="text-gray-800 hover:text-amber-600 transition">Estudos</a>
+          <a href="../../resumos/" class="text-gray-800 hover:text-amber-600 transition">Resumos</a>
+          <a href="../../books/" class="text-gray-800 hover:text-amber-600 transition">Livros</a>
+          <a href="../../videos/" class="text-gray-800 hover:text-amber-600 transition">Vídeos</a>
+          <a href="../../about/" class="text-gray-800 hover:text-amber-600 transition">Sobre</a>
+          <a href="../../#contact" class="text-gray-800 hover:text-amber-600 transition">Contato</a>
+        </div>
+        <div class="md:hidden flex items-center">
+          <button class="mobile-menu-button" aria-label="Abrir menu" type="button"><i data-feather="menu"></i></button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero-bg min-h-[28vh] flex items-center justify-center text-white">
+    <div class="text-center px-4" data-aos="fade-up">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">Livros Traduzidos</h1>
+      <p class="text-lg md:text-xl opacity-90">Traduções feitas por Jonathan Hack</p>
+    </div>
+  </header>
+
+  <!-- ======= Seção: Livros traduzidos — Jonathan ======= -->
+  <section id="books-jonathan-traduzidos" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Livros traduzidos — Jonathan</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">Obras traduzidas para o português por Jonathan Hack</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <a href="#"
+           target="_blank" rel="noopener noreferrer"
+           class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
+           data-aos="fade-up" data-aos-delay="100">
+          <img src="http://static.photos/black/640x360/4" alt="Título Exemplo (tradução 1)" class="w-full h-[37rem] object-cover">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-xl font-bold text-gray-800">Título Exemplo (tradução 1)</h3>
+              <span class="badge">Tradução</span>
+            </div>
+            <p class="text-sm text-gray-500 mb-3">Autor Internacional • Traduzido</p>
+            <p class="text-gray-600 mb-4">Edição comentada em português.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-amber-600 font-medium">Ver na Amazon</span>
+              <span class="text-gray-800 group-hover:text-amber-600 transition inline-flex items-center">
+                <span>Abrir</span><i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#"
+           target="_blank" rel="noopener noreferrer"
+           class="book-card bg-white rounded-lg overflow-hidden shadow-md block"
+           data-aos="fade-up" data-aos-delay="200">
+          <img src="http://static.photos/black/640x360/5" alt="Título Exemplo (tradução 2)" class="w-full h-[37rem] object-cover">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-xl font-bold text-gray-800">Título Exemplo (tradução 2)</h3>
+              <span class="badge">Tradução</span>
+            </div>
+            <p class="text-sm text-gray-500 mb-3">Autor Internacional • Traduzido</p>
+            <p class="text-gray-600 mb-4">Comentado e revisado.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-amber-600 font-medium">Ver na Amazon</span>
+              <span class="text-gray-800 group-hover:text-amber-600 transition inline-flex items-center">
+                <span>Abrir</span><i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
+              </span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="mb-3">
+        <a href="../../privacy/" class="hover:text-white transition">Política de privacidade</a>
+      </div>
+      <p>&copy; <span id="y"></span> institutohack. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
