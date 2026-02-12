@@ -115,8 +115,9 @@
 
 .masonry-item-img {
   position: relative;
-  background-size: cover;
+  background-size: contain;
   background-position: center center;
+  background-repeat: no-repeat;
   background-color: #fff;
   flex: 1;
   width: 100%;
