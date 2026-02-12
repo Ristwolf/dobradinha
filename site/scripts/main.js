@@ -97,6 +97,8 @@ function initTabs() {
   if (tabs.length === 0 || panels.length === 0) return;
 
   const isResumosPage = Boolean(document.querySelector('[data-page="resumos"]'));
+  const isStudiesPage = Boolean(document.querySelector('[data-page="studies"]'));
+  const shouldUseHash = isResumosPage || isStudiesPage;
   const hashAliases = isResumosPage
     ? {
         historia: 'history',
@@ -172,17 +174,17 @@ function initTabs() {
   }
 
   tabs.forEach((tab) => {
-    tab.addEventListener('click', () => activateTab(tab.dataset.target, { setHash: isResumosPage }));
+    tab.addEventListener('click', () => activateTab(tab.dataset.target, { setHash: shouldUseHash }));
     tab.addEventListener('keydown', (e) => {
       const idx = Array.from(tabs).indexOf(tab);
       if (e.key === 'ArrowRight') {
         const next = tabs[(idx + 1) % tabs.length];
         next.focus();
-        activateTab(next.dataset.target, { setHash: isResumosPage });
+        activateTab(next.dataset.target, { setHash: shouldUseHash });
       } else if (e.key === 'ArrowLeft') {
         const prev = tabs[(idx - 1 + tabs.length) % tabs.length];
         prev.focus();
-        activateTab(prev.dataset.target, { setHash: isResumosPage });
+        activateTab(prev.dataset.target, { setHash: shouldUseHash });
       }
     });
   });
@@ -207,10 +209,10 @@ function initTabs() {
   }
 
   window.addEventListener('hashchange', activateFromHash);
-  if (isResumosPage) {
-    // For non-resumos pages, we don't want to hijack hash navigation.
+  if (shouldUseHash) {
     activateFromHash();
   } else {
+    // For non-resumos pages, we don't want to hijack hash navigation.
     activateTab(tabs[0].dataset.target);
   }
 }
@@ -738,10 +740,7 @@ async function renderStudies() {
       <div class="pdfCard__info">
         <div class="pdfCard__name"></div>
 
-        <div class="pdfCard__actions">
-          <div class="pdfPlay" aria-hidden="true">▶</div>
-          <div class="pdfCard__cta">Abrir</div>
-        </div>
+        <div class="pdfCard__actions"></div>
       </div>
     `;
 
