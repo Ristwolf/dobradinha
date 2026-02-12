@@ -17,6 +17,16 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
+.books-page .book-card {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.books-page .book-card img {
+  height: 29.6rem;
+}
+
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 18px 22px -8px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
@@ -146,10 +156,11 @@
 /* ====== Netflix-like PDF Shelf (PDFFlix) ====== */ 
 .pdfflix {
   padding: 24px;
-  color: #fff;
-  background: #827f7deb;
+  color: #1f2937;
+  background: #ffffff;
   border-radius: 18px;
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
 .pdfflix__header {
@@ -279,7 +290,7 @@
   transform: scale(1.05);
   z-index: 5;
   border-color: rgba(255, 255, 255, 0.24);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.38);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
 }
 
 .pdfCard__thumb {
