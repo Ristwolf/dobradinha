@@ -705,13 +705,22 @@ async function renderStudies() {
   const page = document.querySelector('[data-page="studies"]');
   if (!page) return;
 
-  const prefix = getSiteRelativePrefix();
+  const isFileProtocol = window.location.protocol === 'file:';
+  const prefix = isFileProtocol ? '../../' : getSiteRelativePrefix();
 
   let data;
   try {
     data = await fetchJson(prefix + 'data/studies.json');
   } catch {
-    return;
+    const inlineData = document.getElementById('studies-data');
+    if (inlineData) {
+      try {
+        data = JSON.parse(inlineData.textContent || '{}');
+      } catch {
+        data = null;
+      }
+    }
+    if (!data) return;
   }
 
   const modal = document.getElementById('pdfflixModal');
